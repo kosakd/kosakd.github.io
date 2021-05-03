@@ -1309,7 +1309,7 @@ pre code {
   margin-top: 10px;
 }
 .cc-license .cc-opacity {
-  border-bottom: none;
+  border-bottom: 0;
   opacity: 0.7;
 }
 .cc-license .cc-opacity:hover {
@@ -1627,6 +1627,15 @@ pre code {
   display: inline-block;
   margin: 0 5px;
   animation: icon-animate 1.33s ease-in-out infinite;
+}
+.beian img {
+  display: inline-block;
+}
+.busuanzi-count #busuanzi_container_site_uv {
+  display: none;
+}
+.busuanzi-count #busuanzi_container_site_pv {
+  display: none;
 }
 @-moz-keyframes icon-animate {
   0%, 100% {

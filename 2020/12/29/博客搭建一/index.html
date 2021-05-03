@@ -21,39 +21,39 @@
 
 <script class="hexo-configurations">
     var NexT = window.NexT || {};
-    var CONFIG = {"hostname":"kosakd.com","root":"/","images":"/images","scheme":"Gemini","version":"8.1.0","exturl":false,"sidebar":{"position":"right","display":"post","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}};
+    var CONFIG = {"hostname":"kosakd.github.io","root":"/","images":"/images","scheme":"Gemini","version":"8.1.0","exturl":false,"sidebar":{"position":"right","display":"post","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}};
   </script>
 <meta name="description" content="使用Hexo+Next搭建个人博客应为我的腾讯云服务器到期了，域名还有半年时间到期，我就想着能不能用这个域名搭个bolg首先想到的是GitHub pages，到网上搜索了半天，终于找到了合适的环境安装本机需要安装，nodejs环境和git，hexonodejs安装12345678910111213141516Windows官网下载安装程序	https:&#x2F;&#x2F;nodejs.org&#x2F;en&#x2F;downloa">
 <meta property="og:type" content="article">
 <meta property="og:title" content="博客搭建一">
-<meta property="og:url" content="https://kosakd.com/2020/12/29/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E4%B8%80/index.html">
+<meta property="og:url" content="https://kosakd.github.io/2020/12/29/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E4%B8%80/index.html">
 <meta property="og:site_name" content="Kosakd&#39;s Blog">
 <meta property="og:description" content="使用Hexo+Next搭建个人博客应为我的腾讯云服务器到期了，域名还有半年时间到期，我就想着能不能用这个域名搭个bolg首先想到的是GitHub pages，到网上搜索了半天，终于找到了合适的环境安装本机需要安装，nodejs环境和git，hexonodejs安装12345678910111213141516Windows官网下载安装程序	https:&#x2F;&#x2F;nodejs.org&#x2F;en&#x2F;downloa">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://kosakd.com/.com//image-20201229083859445.png">
-<meta property="og:image" content="https://kosakd.com/.com//image-20201229090049579.png">
-<meta property="og:image" content="https://kosakd.com/.com//image-20201229090743486.png">
-<meta property="og:image" content="https://kosakd.com/.com//image-20201229090825207.png">
-<meta property="og:image" content="https://kosakd.com/.com//image-20201229091424914.png">
-<meta property="og:image" content="https://kosakd.com/.com//image-20201229092144720.png">
-<meta property="og:image" content="https://kosakd.com/.com//image-20201229091931644.png">
-<meta property="og:image" content="https://kosakd.com/.com//image-20201229092226145.png">
-<meta property="og:image" content="https://kosakd.com/.com//image-20201229092501758.png">
-<meta property="og:image" content="https://kosakd.com/.com//image-20201229102955683.png">
-<meta property="og:image" content="https://kosakd.com/.com//image-20201229103048490.png">
-<meta property="og:image" content="https://kosakd.com/.com//image-20201229103415297.png">
-<meta property="og:image" content="https://kosakd.com/.com//image-20201229103624110.png">
-<meta property="og:image" content="https://kosakd.com/.com//image-20201229105055980.png">
+<meta property="og:image" content="https://kosakd.github.io/2020/12/29/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E4%B8%80/image-20201229083859445.png">
+<meta property="og:image" content="https://kosakd.github.io/2020/12/29/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E4%B8%80/image-20201229090049579.png">
+<meta property="og:image" content="https://kosakd.github.io/2020/12/29/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E4%B8%80/image-20201229090743486.png">
+<meta property="og:image" content="https://kosakd.github.io/2020/12/29/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E4%B8%80/image-20201229090825207.png">
+<meta property="og:image" content="https://kosakd.github.io/2020/12/29/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E4%B8%80/image-20201229091424914.png">
+<meta property="og:image" content="https://kosakd.github.io/2020/12/29/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E4%B8%80/image-20201229092144720.png">
+<meta property="og:image" content="https://kosakd.github.io/2020/12/29/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E4%B8%80/image-20201229091931644.png">
+<meta property="og:image" content="https://kosakd.github.io/2020/12/29/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E4%B8%80/image-20201229092226145.png">
+<meta property="og:image" content="https://kosakd.github.io/2020/12/29/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E4%B8%80/image-20201229092501758.png">
+<meta property="og:image" content="https://kosakd.github.io/2020/12/29/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E4%B8%80/image-20201229102955683.png">
+<meta property="og:image" content="https://kosakd.github.io/2020/12/29/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E4%B8%80/image-20201229103048490.png">
+<meta property="og:image" content="https://kosakd.github.io/2020/12/29/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E4%B8%80/image-20201229103415297.png">
+<meta property="og:image" content="https://kosakd.github.io/2020/12/29/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E4%B8%80/image-20201229103624110.png">
+<meta property="og:image" content="https://kosakd.github.io/2020/12/29/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E4%B8%80/image-20201229105055980.png">
 <meta property="article:published_time" content="2020-12-29T03:15:49.000Z">
 <meta property="article:modified_time" content="2020-12-29T03:35:11.760Z">
 <meta property="article:author" content="花开陌路’">
 <meta property="article:tag" content="博客搭建">
 <meta property="article:tag" content="教程">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://kosakd.com/.com//image-20201229083859445.png">
+<meta name="twitter:image" content="https://kosakd.github.io/2020/12/29/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E4%B8%80/image-20201229083859445.png">
 
 
-<link rel="canonical" href="https://kosakd.com/2020/12/29/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E4%B8%80/">
+<link rel="canonical" href="https://kosakd.github.io/2020/12/29/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E4%B8%80/">
 
 
 <script class="page-configurations">
@@ -285,7 +285,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://kosakd.com/2020/12/29/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E4%B8%80/">
+    <link itemprop="mainEntityOfPage" href="https://kosakd.github.io/2020/12/29/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E4%B8%80/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/touxiang.jpg">
@@ -363,11 +363,11 @@
     
     <div class="post-body" itemprop="articleBody">
         <h1 id="使用Hexo-Next搭建个人博客"><a href="#使用Hexo-Next搭建个人博客" class="headerlink" title="使用Hexo+Next搭建个人博客"></a>使用Hexo+Next搭建个人博客</h1><h3 id="应为我的腾讯云服务器到期了，域名还有半年时间到期，我就想着能不能用这个域名搭个bolg"><a href="#应为我的腾讯云服务器到期了，域名还有半年时间到期，我就想着能不能用这个域名搭个bolg" class="headerlink" title="应为我的腾讯云服务器到期了，域名还有半年时间到期，我就想着能不能用这个域名搭个bolg"></a>应为我的腾讯云服务器到期了，域名还有半年时间到期，我就想着能不能用这个域名搭个bolg</h3><h4 id="首先想到的是GitHub-pages，到网上搜索了半天，终于找到了合适的"><a href="#首先想到的是GitHub-pages，到网上搜索了半天，终于找到了合适的" class="headerlink" title="首先想到的是GitHub pages，到网上搜索了半天，终于找到了合适的"></a>首先想到的是GitHub pages，到网上搜索了半天，终于找到了合适的</h4><h1 id="环境安装"><a href="#环境安装" class="headerlink" title="环境安装"></a>环境安装</h1><h2 id="本机需要安装，nodejs环境和git，hexo"><a href="#本机需要安装，nodejs环境和git，hexo" class="headerlink" title="本机需要安装，nodejs环境和git，hexo"></a>本机需要安装，nodejs环境和git，hexo</h2><h3 id="nodejs安装"><a href="#nodejs安装" class="headerlink" title="nodejs安装"></a>nodejs安装</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">Windows</span><br><span class="line">官网下载安装程序</span><br><span class="line">	https://nodejs.org/en/download/</span><br><span class="line">一键安装</span><br><span class="line">一直下一步，有手就行就不多说了 </span><br><span class="line">安装完成后输入,检查是否安装成功</span><br><span class="line">	node -v</span><br><span class="line">	npm -v</span><br><span class="line">设置npm下载源</span><br><span class="line">	设置华为源：</span><br><span class="line">	npm config <span class="built_in">set</span> registry https://mirrors.huaweicloud.com/repository/npm/</span><br><span class="line">	查看npm的设置</span><br><span class="line">	npm config list</span><br><span class="line">	用新源更新一波package：</span><br><span class="line">	npm update</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-<p><img src="/.com//image-20201229083859445.png" alt="image-20201229083859445"></p>
-<p><img src="/.com//image-20201229090049579.png" alt="image-20201229090049579"></p>
-<p><img src="/.com//image-20201229090743486.png" alt="image-20201229090743486"></p>
-<p><img src="/.com//image-20201229090825207.png" alt="image-20201229090825207"></p>
-<p><img src="/.com//image-20201229091424914.png" alt="image-20201229091424914"></p>
+<p><img src="/2020/12/29/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E4%B8%80/image-20201229083859445.png" alt="image-20201229083859445"></p>
+<p><img src="/2020/12/29/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E4%B8%80/image-20201229090049579.png" alt="image-20201229090049579"></p>
+<p><img src="/2020/12/29/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E4%B8%80/image-20201229090743486.png" alt="image-20201229090743486"></p>
+<p><img src="/2020/12/29/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E4%B8%80/image-20201229090825207.png" alt="image-20201229090825207"></p>
+<p><img src="/2020/12/29/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E4%B8%80/image-20201229091424914.png" alt="image-20201229091424914"></p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">linux</span><br><span class="line">我这是用的unubtu</span><br><span class="line">apt安装安装完成后和上面一样设置下载源</span><br><span class="line">sudo apt-get install nodejs</span><br><span class="line">sudo apt-get install npm</span><br></pre></td></tr></table></figure>
 
 
@@ -376,17 +376,17 @@
 <h3 id="git安装"><a href="#git安装" class="headerlink" title="git安装"></a>git安装</h3><h4 id="Git是目前世界上最先进的分布式版本控制系统，可以有效、高速的处理从很小到非常大的项目版本管理。也就是用来管理你的hexo博客文章，上传到GitHub的工具。"><a href="#Git是目前世界上最先进的分布式版本控制系统，可以有效、高速的处理从很小到非常大的项目版本管理。也就是用来管理你的hexo博客文章，上传到GitHub的工具。" class="headerlink" title="Git是目前世界上最先进的分布式版本控制系统，可以有效、高速的处理从很小到非常大的项目版本管理。也就是用来管理你的hexo博客文章，上传到GitHub的工具。"></a>Git是目前世界上最先进的分布式版本控制系统，可以有效、高速的处理从很小到非常大的项目版本管理。也就是用来管理你的hexo博客文章，上传到GitHub的工具。</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">Windows</span><br><span class="line">官网下载安装程序</span><br><span class="line">	https://git-scm.com/downloads/</span><br><span class="line">一键安装</span><br><span class="line">一直下一步，有手就行就不多说了 </span><br><span class="line">安装完成后桌面右键，查看是否有Git Bash,来检查是否安装成功</span><br><span class="line">打开Git Bash设置GitHub账号</span><br><span class="line">	</span><br><span class="line">	</span><br><span class="line"></span><br></pre></td></tr></table></figure>
 
 
-<p><img src="/.com//image-20201229092144720.png" alt="image-20201229092144720"></p>
-<p><img src="/.com//image-20201229091931644.png" alt="image-20201229091931644"></p>
-<p><img src="/.com//image-20201229092226145.png" alt="image-20201229092226145"></p>
-<p><img src="/.com//image-20201229092501758.png" alt="image-20201229092501758"></p>
+<p><img src="/2020/12/29/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E4%B8%80/image-20201229092144720.png" alt="image-20201229092144720"></p>
+<p><img src="/2020/12/29/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E4%B8%80/image-20201229091931644.png" alt="image-20201229091931644"></p>
+<p><img src="/2020/12/29/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E4%B8%80/image-20201229092226145.png" alt="image-20201229092226145"></p>
+<p><img src="/2020/12/29/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E4%B8%80/image-20201229092501758.png" alt="image-20201229092501758"></p>
 <h3 id="hexo安装"><a href="#hexo安装" class="headerlink" title="hexo安装"></a>hexo安装</h3><h4 id="前面git和nodejs安装好后，就可以安装hexo了，你可以先创建一个文件夹blog，然后cd到这个文件夹下（或者在这个文件夹下直接右键git-bash打开）。"><a href="#前面git和nodejs安装好后，就可以安装hexo了，你可以先创建一个文件夹blog，然后cd到这个文件夹下（或者在这个文件夹下直接右键git-bash打开）。" class="headerlink" title="前面git和nodejs安装好后，就可以安装hexo了，你可以先创建一个文件夹blog，然后cd到这个文件夹下（或者在这个文件夹下直接右键git bash打开）。"></a>前面git和nodejs安装好后，就可以安装hexo了，你可以先创建一个文件夹blog，然后<code>cd</code>到这个文件夹下（或者在这个文件夹下直接右键git bash打开）。</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">window</span><br><span class="line">直接在powershell输入，安装</span><br><span class="line">	npm install -g hexo-cli</span><br><span class="line">查看下hexo版本，来判断是否安装成功</span><br><span class="line">	hexo -v</span><br><span class="line">用hexo初始化一个项目</span><br><span class="line">	hexo init myblog</span><br><span class="line">然后进入，项目文件夹安装环境依赖</span><br><span class="line">	<span class="built_in">cd</span> myblog</span><br><span class="line">	npm install</span><br><span class="line">部署个博客</span><br><span class="line">	hexo g</span><br><span class="line">	hexo server</span><br><span class="line">	在浏览器输入localhost:4000就可以看到你生成的博客了。</span><br><span class="line">	ctrl+c，即可退出程序</span><br></pre></td></tr></table></figure>
-<p><img src="/.com//image-20201229102955683.png" alt="image-20201229102955683"></p>
-<p><img src="/.com//image-20201229103048490.png" alt="image-20201229103048490"></p>
+<p><img src="/2020/12/29/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E4%B8%80/image-20201229102955683.png" alt="image-20201229102955683"></p>
+<p><img src="/2020/12/29/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E4%B8%80/image-20201229103048490.png" alt="image-20201229103048490"></p>
 <h4 id="hexo安装完成后，安装next主题"><a href="#hexo安装完成后，安装next主题" class="headerlink" title="hexo安装完成后，安装next主题"></a>hexo安装完成后，安装next主题</h4><h4 id="因为hexo默认的主题，emmm，我看着不太喜欢，所以我们要换个主题"><a href="#因为hexo默认的主题，emmm，我看着不太喜欢，所以我们要换个主题" class="headerlink" title="因为hexo默认的主题，emmm，我看着不太喜欢，所以我们要换个主题"></a>因为hexo默认的主题，emmm，我看着不太喜欢，所以我们要换个主题</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">到你的hexo项目文件夹中执行以下命令，我推荐用第一个，应为快</span><br><span class="line">	<span class="built_in">cd</span> ~/myblog</span><br><span class="line">	npm install hexo-theme-next </span><br><span class="line">	或者</span><br><span class="line">	<span class="built_in">cd</span> ~/myblog</span><br><span class="line">	git <span class="built_in">clone</span> https://github.com/iissnan/hexo-theme-next themes/next</span><br><span class="line">下载完后配置下，博客根目录下的_config.yml，打开，找到theme设置为next</span><br><span class="line">	theme: next</span><br><span class="line">设置完成后重新部署启动</span><br><span class="line">	hexo g</span><br><span class="line">	hexo s</span><br><span class="line">	在浏览器输入localhost:4000就可以看到你生成的博客，主题换了</span><br></pre></td></tr></table></figure>
-<p><img src="/.com//image-20201229103415297.png" alt="image-20201229103415297"></p>
-<p><img src="/.com//image-20201229103624110.png" alt="image-20201229103624110"></p>
-<p><img src="/.com//image-20201229105055980.png" alt="image-20201229105055980"></p>
+<p><img src="/2020/12/29/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E4%B8%80/image-20201229103415297.png" alt="image-20201229103415297"></p>
+<p><img src="/2020/12/29/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E4%B8%80/image-20201229103624110.png" alt="image-20201229103624110"></p>
+<p><img src="/2020/12/29/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E4%B8%80/image-20201229105055980.png" alt="image-20201229105055980"></p>
 
     </div>
 
@@ -404,7 +404,7 @@
   </li>
   <li class="post-copyright-link">
       <strong>本文链接：</strong>
-      <a href="https://kosakd.com/2020/12/29/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E4%B8%80/" title="博客搭建一">https://kosakd.com/2020/12/29/博客搭建一/</a>
+      <a href="https://kosakd.github.io/2020/12/29/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E4%B8%80/" title="博客搭建一">https://kosakd.github.io/2020/12/29/博客搭建一/</a>
   </li>
   <li class="post-copyright-license">
     <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/zh-CN" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
@@ -426,6 +426,9 @@
                 </a>
             </div>
             <div class="post-nav-item">
+                <a href="/2021/05/04/hello-world/" rel="next" title="Hello World">
+                  Hello World <i class="fa fa-chevron-right"></i>
+                </a>
             </div>
           </div>
     </footer>
