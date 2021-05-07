@@ -30,6 +30,7 @@
 <meta property="og:site_name" content="Kosakd&#39;s Blog">
 <meta property="og:description" content="这次的截图比较少，因为当时忘记截图了，本来想复盘，结果漏洞都修复了，所以这次文章，文字偏多，图片得打厚吗。故事的发生在三月份，那时候我天天泡图书馆，学习go，应为要自己造轮子，写个扫描器，有一次我对图书馆的查书系统感兴趣了，在查书的时候，按了下，win键，发现直接弹出桌面，好奇心旺盛的我就，随手进行了个测试，段了个网，数据库账号密码就显现到我面前了，">
 <meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://kosakd.github.io/2021/05/04/%E8%AE%B0%E4%B8%80%E6%AC%A1%E6%A0%A1%E5%9B%AD%E7%BD%91%E6%94%BB%E9%98%B2%E6%BC%94%E7%BB%83/1.png">
 <meta property="og:image" content="https://xzfile.aliyuncs.com/media/upload/picture/20210422212756-8c65e0ec-a36e-1.png">
 <meta property="og:image" content="https://xzfile.aliyuncs.com/media/upload/picture/20210422212828-9faa38e2-a36e-1.png">
 <meta property="og:image" content="https://xzfile.aliyuncs.com/media/upload/picture/20210422212854-af57bfe4-a36e-1.png">
@@ -55,12 +56,12 @@
 <meta property="og:image" content="https://xzfile.aliyuncs.com/media/upload/picture/20210422220541-d256e3ee-a373-1.png">
 <meta property="og:image" content="https://xzfile.aliyuncs.com/media/upload/picture/20210422220622-eb4ea404-a373-1.jpeg">
 <meta property="article:published_time" content="2021-05-03T17:56:45.000Z">
-<meta property="article:modified_time" content="2021-05-07T03:53:35.618Z">
+<meta property="article:modified_time" content="2021-05-07T06:16:30.379Z">
 <meta property="article:author" content="花开陌路’">
 <meta property="article:tag" content="渗透">
 <meta property="article:tag" content="笔记">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://xzfile.aliyuncs.com/media/upload/picture/20210422212756-8c65e0ec-a36e-1.png">
+<meta name="twitter:image" content="https://kosakd.github.io/2021/05/04/%E8%AE%B0%E4%B8%80%E6%AC%A1%E6%A0%A1%E5%9B%AD%E7%BD%91%E6%94%BB%E9%98%B2%E6%BC%94%E7%BB%83/1.png">
 
 
 <link rel="canonical" href="https://kosakd.github.io/2021/05/04/%E8%AE%B0%E4%B8%80%E6%AC%A1%E6%A0%A1%E5%9B%AD%E7%BD%91%E6%94%BB%E9%98%B2%E6%BC%94%E7%BB%83/">
@@ -328,7 +329,7 @@
           <i class="far fa-calendar-check"></i>
         </span>
         <span class="post-meta-item-text">更新于</span>
-        <time title="修改时间：2021-05-07 11:53:35" itemprop="dateModified" datetime="2021-05-07T11:53:35+08:00">2021-05-07</time>
+        <time title="修改时间：2021-05-07 14:16:30" itemprop="dateModified" datetime="2021-05-07T14:16:30+08:00">2021-05-07</time>
       </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -380,7 +381,8 @@
     
     
     <div class="post-body" itemprop="articleBody">
-        <p>这次的截图比较少，因为当时忘记截图了，本来想复盘，结果漏洞都修复了，所以这次文章，文字偏多，图片得打厚吗。<br>故事的发生在三月份，那时候我天天泡图书馆，学习go，应为要自己造轮子，写个扫描器，有一次我对图书馆的查书系统感兴趣了，在查书的时候，按了下，win键，发现直接弹出桌面，好奇心旺盛的我就，随手进行了个测试，段了个网，数据库账号密码就显现到我面前了，</p>
+        <p><img src="/2021/05/04/%E8%AE%B0%E4%B8%80%E6%AC%A1%E6%A0%A1%E5%9B%AD%E7%BD%91%E6%94%BB%E9%98%B2%E6%BC%94%E7%BB%83/1.png" alt="扫码"></p>
+<p>这次的截图比较少，因为当时忘记截图了，本来想复盘，结果漏洞都修复了，所以这次文章，文字偏多，图片得打厚吗。<br>故事的发生在三月份，那时候我天天泡图书馆，学习go，应为要自己造轮子，写个扫描器，有一次我对图书馆的查书系统感兴趣了，在查书的时候，按了下，win键，发现直接弹出桌面，好奇心旺盛的我就，随手进行了个测试，段了个网，数据库账号密码就显现到我面前了，</p>
 <a id="more"></a>
 
 <p>密码是圆筒加密的，网上随便下载个密码查看器就能查看到，把遮掩属性给去掉就行了，获取到一个普通权限的sql用户，不过知道了数据库的ip，在内网中的网段，尝试连接下看，发现图书管理系统的数据库中，存放着，从建校以来的所有学生和老师信息，我去这不得了啊！我当时就是，打算，上报，但是想上报给学校机房负责人，但是我也不认识他啊，问了下任课老师，任课老师也说不知道。那么上班无果，那能怎么办呢？接着渗透测试呗！（这点，小伙伴们要注意，千万别学我，血的教训）<br>我获取到了，数据库的一个普通用户，和数据库服务器的ip，数据库服务器的ip在校园网中，连接校园网就能ping通，接下来通过，goby扫描C段，信息收集，<br>    没有发现漏洞，但是收集了一波信息资产，这时候，发现这个c段好像没有啥对外开放的服务，连web都没几个，全是waf服务<br>    我猜测这个c段应该不是哪些web服务啥的主要网段，果然，我扫面了，下一个c段，资产就全部显现出来了</p>
