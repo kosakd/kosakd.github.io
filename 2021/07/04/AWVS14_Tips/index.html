@@ -23,18 +23,35 @@
     var NexT = window.NexT || {};
     var CONFIG = {"hostname":"kosakd.github.io","root":"/","images":"/images","scheme":"Gemini","version":"8.1.0","exturl":false,"sidebar":{"position":"right","display":"post","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}};
   </script>
-<meta name="description" content="朝闻道，夕死可矣。——语出《论语·里仁》">
-<meta property="og:type" content="website">
-<meta property="og:title" content="Kosakd&#39;s Blog">
-<meta property="og:url" content="https://kosakd.github.io/archives/page/2/index.html">
+<meta name="description" content="Awvs14​    AWVS扫描器强大的爬虫功能不言而喻，AWVS+xray现在都是主流打法，前个礼拜看到了AWVS14有docker环境，这篇笔记记录下，布置的流程，也没啥，布置完成后突然有个想法，希望看到最后  Dokcer环境安装​    docker安装  1curl -sSL https:&#x2F;&#x2F;get.daocloud.io&#x2F;docker | sh docker Hub镜像加速 创建或修">
+<meta property="og:type" content="article">
+<meta property="og:title" content="AWVS14_Tips">
+<meta property="og:url" content="https://kosakd.github.io/2021/07/04/AWVS14_Tips/index.html">
 <meta property="og:site_name" content="Kosakd&#39;s Blog">
-<meta property="og:description" content="朝闻道，夕死可矣。——语出《论语·里仁》">
+<meta property="og:description" content="Awvs14​    AWVS扫描器强大的爬虫功能不言而喻，AWVS+xray现在都是主流打法，前个礼拜看到了AWVS14有docker环境，这篇笔记记录下，布置的流程，也没啥，布置完成后突然有个想法，希望看到最后  Dokcer环境安装​    docker安装  1curl -sSL https:&#x2F;&#x2F;get.daocloud.io&#x2F;docker | sh docker Hub镜像加速 创建或修">
 <meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://kosakd.github.io/2021/07/04/AWVS14_Tips/1.jpg">
+<meta property="og:image" content="https://kosakd.github.io/2021/07/04/AWVS14_Tips/2.png">
+<meta property="og:image" content="https://kosakd.github.io/2021/07/04/AWVS14_Tips/3.png">
+<meta property="og:image" content="https://kosakd.github.io/2021/07/04/AWVS14_Tips/4.png">
+<meta property="og:image" content="https://kosakd.github.io/2021/07/04/AWVS14_Tips/5.png">
+<meta property="og:image" content="https://kosakd.github.io/2021/07/04/AWVS14_Tips/6.png">
+<meta property="og:image" content="https://kosakd.github.io/2021/07/04/AWVS14_Tips/7.png">
+<meta property="og:image" content="https://kosakd.github.io/2021/07/04/AWVS14_Tips/8.png">
+<meta property="og:image" content="https://kosakd.github.io/2021/07/04/AWVS14_Tips/9.png">
+<meta property="og:image" content="https://kosakd.github.io/2021/07/04/AWVS14_Tips/10.png">
+<meta property="og:image" content="https://kosakd.github.io/2021/07/04/AWVS14_Tips/11.png">
+<meta property="article:published_time" content="2021-07-04T15:13:07.000Z">
+<meta property="article:modified_time" content="2021-07-04T18:33:55.590Z">
 <meta property="article:author" content="花开陌路’">
+<meta property="article:tag" content="渗透">
+<meta property="article:tag" content="笔记">
+<meta property="article:tag" content="工具教程">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://kosakd.github.io/2021/07/04/AWVS14_Tips/1.jpg">
 
 
-<link rel="canonical" href="https://kosakd.github.io/archives/page/2/">
+<link rel="canonical" href="https://kosakd.github.io/2021/07/04/AWVS14_Tips/">
 
 
 <script class="page-configurations">
@@ -42,11 +59,11 @@
   CONFIG.page = {
     sidebar: "",
     isHome : false,
-    isPost : false,
+    isPost : true,
     lang   : 'zh-CN'
   };
 </script>
-<title>归档 | Kosakd's Blog</title>
+<title>AWVS14_Tips | Kosakd's Blog</title>
   
 
 
@@ -164,7 +181,7 @@
 
   <aside class="sidebar">
 
-    <div class="sidebar-inner sidebar-overview-active">
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
       <ul class="sidebar-nav">
         <li class="sidebar-nav-toc">
           文章目录
@@ -177,6 +194,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <section class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Awvs14"><span class="nav-number">1.</span> <span class="nav-text">Awvs14</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Dokcer%E7%8E%AF%E5%A2%83%E5%AE%89%E8%A3%85"><span class="nav-number">2.</span> <span class="nav-text">Dokcer环境安装</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#AWVS14-Dokcer%E7%8E%AF%E5%A2%83%E9%83%A8%E7%BD%B2"><span class="nav-number">3.</span> <span class="nav-text">AWVS14 Dokcer环境部署</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9C%89%E8%B6%A3%E7%9A%84%E6%9D%A5%E4%BA%86"><span class="nav-number">4.</span> <span class="nav-text">有趣的来了</span></a></li></ol></div>
         </section>
         <!--/noindex-->
 
@@ -260,75 +278,186 @@
 </noscript>
 
 
-    <div class="main-inner archive posts-collapse">
+    <div class="main-inner post posts-expand">
 
 
   
+
+
+<div class="post-block">
   
   
-  <div class="post-block">
-    <div class="post-content">
-      <div class="collection-title">
-        <span class="collection-header">嗯..! 目前共计 12 篇日志。 继续努力。</span>
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://kosakd.github.io/2021/07/04/AWVS14_Tips/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/touxiang.jpg">
+      <meta itemprop="name" content="花开陌路’">
+      <meta itemprop="description" content="朝闻道，夕死可矣。——语出《论语·里仁》">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Kosakd's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          AWVS14_Tips
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2021-07-04 23:13:07" itemprop="dateCreated datePublished" datetime="2021-07-04T23:13:07+08:00">2021-07-04</time>
+    </span>
+      <span class="post-meta-item">
+        <span class="post-meta-item-icon">
+          <i class="far fa-calendar-check"></i>
+        </span>
+        <span class="post-meta-item-text">更新于</span>
+        <time title="修改时间：2021-07-05 02:33:55" itemprop="dateModified" datetime="2021-07-05T02:33:55+08:00">2021-07-05</time>
+      </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E5%B7%A5%E5%85%B7%E5%88%86%E4%BA%AB/" itemprop="url" rel="index"><span itemprop="name">工具分享</span></a>
+        </span>
+    </span>
+
+  
+    <span id="/2021/07/04/AWVS14_Tips/" class="post-meta-item leancloud_visitors" data-flag-title="AWVS14_Tips" title="阅读次数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span class="leancloud-visitors-count"></span>
+    </span>
+    <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
       </div>
+      <div class="post-meta">
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>1.2k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>1 分钟</span>
+    </span>
+</div>
 
-      
-    <div class="collection-year">
-      <span class="collection-header">2021</span>
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h2 id="Awvs14"><a href="#Awvs14" class="headerlink" title="Awvs14"></a>Awvs14</h2><p>​    AWVS扫描器强大的爬虫功能不言而喻，AWVS+xray现在都是主流打法，前个礼拜看到了AWVS14有docker环境，这篇笔记记录下，布置的流程，也没啥，布置完成后突然有个想法，希望看到最后</p>
+<p><img src="/2021/07/04/AWVS14_Tips/1.jpg" alt="1"></p>
+<h2 id="Dokcer环境安装"><a href="#Dokcer环境安装" class="headerlink" title="Dokcer环境安装"></a>Dokcer环境安装</h2><p>​    docker安装 </p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl -sSL https://get.daocloud.io/docker | sh</span><br></pre></td></tr></table></figure>
+<p>docker Hub镜像加速</p>
+<p>创建或修改 <code>/etc/docker/daemon.json</code></p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">sudo mkdir -p /etc/docker</span><br><span class="line">sudo tee /etc/docker/daemon.json &lt;&lt;-<span class="string">&#x27;EOF&#x27;</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="string">&quot;registry-mirrors&quot;</span>: [</span><br><span class="line">        <span class="string">&quot;https://1nj0zren.mirror.aliyuncs.com&quot;</span>,</span><br><span class="line">        <span class="string">&quot;https://docker.mirrors.ustc.edu.cn&quot;</span>,</span><br><span class="line">        <span class="string">&quot;http://f1361db2.m.daocloud.io&quot;</span>,</span><br><span class="line">        <span class="string">&quot;https://registry.docker-cn.com&quot;</span></span><br><span class="line">    ]</span><br><span class="line">&#125;</span><br><span class="line">EOF</span><br><span class="line">sudo systemctl daemon-reload</span><br><span class="line">sudo systemctl restart docker</span><br></pre></td></tr></table></figure>
+
+
+<h2 id="AWVS14-Dokcer环境部署"><a href="#AWVS14-Dokcer环境部署" class="headerlink" title="AWVS14 Dokcer环境部署"></a>AWVS14 Dokcer环境部署</h2><p>查找镜像</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker search awvs</span><br></pre></td></tr></table></figure>
+
+
+<p><img src="/2021/07/04/AWVS14_Tips/2.png" alt="2"></p>
+<p>这里就随便找一个，安装一个最近更新的，<code>xrsec/awvs</code>，看看它的介绍</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">https:&#x2F;&#x2F;hub.docker.com&#x2F;r&#x2F;xrsec&#x2F;awvs</span><br></pre></td></tr></table></figure>
+<p><img src="/2021/07/04/AWVS14_Tips/3.png" alt="3"></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">地址：https:&#x2F;&#x2F;you_ip:3443</span><br><span class="line">账号：awvs@awvs.com</span><br><span class="line">密码：Awvs@awvs.com</span><br></pre></td></tr></table></figure>
+<p>拉取镜像</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker pull xrsec&#x2F;awvs</span><br></pre></td></tr></table></figure>
+<p><img src="/2021/07/04/AWVS14_Tips/4.png" alt="4"></p>
+<p>run docker</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run -it -d --name awvs -p 3443:3443 xrsec/awvs</span><br></pre></td></tr></table></figure>
+<p>登录扫描测试</p>
+<p><img src="/2021/07/04/AWVS14_Tips/5.png" alt="5"></p>
+<p><img src="/2021/07/04/AWVS14_Tips/6.png" alt="6"></p>
+<p>AWVS14牛啊，就是有点慢，还是配合xray扫描快点</p>
+<p><img src="/2021/07/04/AWVS14_Tips/7.png" alt="7"></p>
+<h2 id="有趣的来了"><a href="#有趣的来了" class="headerlink" title="有趣的来了"></a>有趣的来了</h2><p>当我安装完成后，发下这个awvs14 docker环境还挺多人下载的，我们安装完成docker环境一般都不会去改密码，大多数安装docker环境的都是再公网服务器上，缓解服务器压力挂着扫目标，这就会不会有弱口令，我找start最多数量的awvs14的docker环境试了试<code>secfa/docker-awvs</code>，还真有.</p>
+<p>通过fofa证书查找，看相同镜像的服务器</p>
+<p><img src="/2021/07/04/AWVS14_Tips/8.png" alt="8"></p>
+<p><img src="/2021/07/04/AWVS14_Tips/9.png" alt="9"></p>
+<p>写了个脚本跑了一下，还算蛮多弱口令的，</p>
+<p><img src="/2021/07/04/AWVS14_Tips/10.png" alt="10"></p>
+<p><img src="/2021/07/04/AWVS14_Tips/11.png" alt="11"></p>
+<p>这个弱口令危害还是蛮大的，当我们的awvs服务器有弱口令，其他人登录了我们的服务器，其一我们的目标漏洞可能就泄露了，其二如果别人用我们的AWVS扫描敏感站点，如果敏感站点溯源到了你的服务器，你就哦豁了，如果是放在公网的AWVS服务器还是尽快更改密码吧！！！！！</p>
+
     </div>
 
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-      <div class="post-meta-container">
-        <time itemprop="dateCreated"
-              datetime="2021-05-04T01:53:15+08:00"
-              content="2021-05-04">
-          05-04
-        </time>
-      </div>
+    
+    
+    
 
-      <div class="post-title">
-          <a class="post-title-link" href="/2021/05/04/%E8%AE%B0%E4%B8%80%E6%AC%A1%E6%97%A0%E6%84%8F%E7%9A%84%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/" itemprop="url">
-            <span itemprop="name">记一次无意的渗透测试</span>
-          </a>
-      </div>
+    <footer class="post-footer">
+          
 
-      
-    </header>
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>花开陌路’
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="https://kosakd.github.io/2021/07/04/AWVS14_Tips/" title="AWVS14_Tips">https://kosakd.github.io/2021/07/04/AWVS14_Tips/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/zh-CN" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/%E6%B8%97%E9%80%8F/" rel="tag"># 渗透</a>
+              <a href="/tags/%E7%AC%94%E8%AE%B0/" rel="tag"># 笔记</a>
+              <a href="/tags/%E5%B7%A5%E5%85%B7%E6%95%99%E7%A8%8B/" rel="tag"># 工具教程</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2021/06/20/%E5%9F%9F%E5%89%8D%E7%BD%AE%E4%B8%8A%E7%BA%BF%E9%9A%90%E8%97%8F/" rel="prev" title="域前置上线隐藏">
+                  <i class="fa fa-chevron-left"></i> 域前置上线隐藏
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
   </article>
-    <div class="collection-year">
-      <span class="collection-header">2020</span>
-    </div>
-
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-      <div class="post-meta-container">
-        <time itemprop="dateCreated"
-              datetime="2020-12-29T11:15:49+08:00"
-              content="2020-12-29">
-          12-29
-        </time>
-      </div>
-
-      <div class="post-title">
-          <a class="post-title-link" href="/2020/12/29/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E4%B8%80/" itemprop="url">
-            <span itemprop="name">博客搭建一</span>
-          </a>
-      </div>
-
-      
-    </header>
-  </article>
+</div>
 
 
-    </div>
-  </div>
-  
-  
-  
-  <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/archives/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="/archives/">1</a><span class="page-number current">2</span>
-  </nav>
+
+
+
 
 
 <script>
