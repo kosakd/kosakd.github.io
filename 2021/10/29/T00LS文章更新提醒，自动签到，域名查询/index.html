@@ -23,36 +23,32 @@
     var NexT = window.NexT || {};
     var CONFIG = {"hostname":"kosakd.github.io","root":"/","images":"/images","scheme":"Gemini","version":"8.1.0","exturl":false,"sidebar":{"position":"right","display":"post","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}};
   </script>
-<meta name="description" content="端口转发当我们获取到一台，边缘（DMZ）服务器的Shell,时该如何进行下一步渗透呢？ 如果我们要进行下一步的渗透操作，这个时候，我们就要先进行内网信息收集，一般DMZ服务器，都会有两个网卡，一个是隔离的外网网卡，一个是内网网卡，但内网是一般都不会通外网的，这个时候，我们就要进行，本地端口转发了（端口映射），这里可以用到win上的工具netsh">
+<meta name="description" content="T00LS文章更新提醒，自动签到，域名查询此程序是基于，T00LS的api和server酱api实现，程序自动签到，和新文章更新提醒此版本，是一晚上赶工做出来的，突然懒癌发作不想一页一页翻论坛，就写个程序，可能代码有些凌乱，下一个版本会整改下代码，并且添加多个提醒api，钉钉机器人推送，server酱推送，Telegram机器人推送，配置文件将会单独开一个yaml文件">
 <meta property="og:type" content="article">
-<meta property="og:title" content="内网渗透之端口转发，socket代理">
-<meta property="og:url" content="https://kosakd.github.io/2021/05/11/%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F%E4%B9%8B%E7%AB%AF%E5%8F%A3%E8%BD%AC%E5%8F%91%EF%BC%8Csocket%E4%BB%A3%E7%90%86/index.html">
+<meta property="og:title" content="T00LS文章更新提醒，自动签到，域名查询">
+<meta property="og:url" content="https://kosakd.github.io/2021/10/29/T00LS%E6%96%87%E7%AB%A0%E6%9B%B4%E6%96%B0%E6%8F%90%E9%86%92%EF%BC%8C%E8%87%AA%E5%8A%A8%E7%AD%BE%E5%88%B0%EF%BC%8C%E5%9F%9F%E5%90%8D%E6%9F%A5%E8%AF%A2/index.html">
 <meta property="og:site_name" content="Kosakd&#39;s Blog">
-<meta property="og:description" content="端口转发当我们获取到一台，边缘（DMZ）服务器的Shell,时该如何进行下一步渗透呢？ 如果我们要进行下一步的渗透操作，这个时候，我们就要先进行内网信息收集，一般DMZ服务器，都会有两个网卡，一个是隔离的外网网卡，一个是内网网卡，但内网是一般都不会通外网的，这个时候，我们就要进行，本地端口转发了（端口映射），这里可以用到win上的工具netsh">
+<meta property="og:description" content="T00LS文章更新提醒，自动签到，域名查询此程序是基于，T00LS的api和server酱api实现，程序自动签到，和新文章更新提醒此版本，是一晚上赶工做出来的，突然懒癌发作不想一页一页翻论坛，就写个程序，可能代码有些凌乱，下一个版本会整改下代码，并且添加多个提醒api，钉钉机器人推送，server酱推送，Telegram机器人推送，配置文件将会单独开一个yaml文件">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://kosakd.github.io/2021/05/11/%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F%E4%B9%8B%E7%AB%AF%E5%8F%A3%E8%BD%AC%E5%8F%91%EF%BC%8Csocket%E4%BB%A3%E7%90%86/sao.png">
-<meta property="og:image" content="https://kosakd.github.io/2021/05/11/%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F%E4%B9%8B%E7%AB%AF%E5%8F%A3%E8%BD%AC%E5%8F%91%EF%BC%8Csocket%E4%BB%A3%E7%90%86/1.png">
-<meta property="og:image" content="https://kosakd.github.io/2021/05/11/%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F%E4%B9%8B%E7%AB%AF%E5%8F%A3%E8%BD%AC%E5%8F%91%EF%BC%8Csocket%E4%BB%A3%E7%90%86/3.png">
-<meta property="og:image" content="https://kosakd.github.io/2021/05/11/%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F%E4%B9%8B%E7%AB%AF%E5%8F%A3%E8%BD%AC%E5%8F%91%EF%BC%8Csocket%E4%BB%A3%E7%90%86/4.png">
-<meta property="og:image" content="https://kosakd.github.io/2021/05/11/%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F%E4%B9%8B%E7%AB%AF%E5%8F%A3%E8%BD%AC%E5%8F%91%EF%BC%8Csocket%E4%BB%A3%E7%90%86/2.png">
-<meta property="og:image" content="https://kosakd.github.io/2021/05/11/%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F%E4%B9%8B%E7%AB%AF%E5%8F%A3%E8%BD%AC%E5%8F%91%EF%BC%8Csocket%E4%BB%A3%E7%90%86/5.png">
-<meta property="og:image" content="https://kosakd.github.io/2021/05/11/%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F%E4%B9%8B%E7%AB%AF%E5%8F%A3%E8%BD%AC%E5%8F%91%EF%BC%8Csocket%E4%BB%A3%E7%90%86/6.png">
-<meta property="og:image" content="https://kosakd.github.io/2021/05/11/%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F%E4%B9%8B%E7%AB%AF%E5%8F%A3%E8%BD%AC%E5%8F%91%EF%BC%8Csocket%E4%BB%A3%E7%90%86/7.png">
-<meta property="og:image" content="https://kosakd.github.io/2021/05/11/%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F%E4%B9%8B%E7%AB%AF%E5%8F%A3%E8%BD%AC%E5%8F%91%EF%BC%8Csocket%E4%BB%A3%E7%90%86/8.png">
-<meta property="og:image" content="https://kosakd.github.io/2021/05/11/%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F%E4%B9%8B%E7%AB%AF%E5%8F%A3%E8%BD%AC%E5%8F%91%EF%BC%8Csocket%E4%BB%A3%E7%90%86/9.png">
-<meta property="og:image" content="https://kosakd.github.io/2021/05/11/%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F%E4%B9%8B%E7%AB%AF%E5%8F%A3%E8%BD%AC%E5%8F%91%EF%BC%8Csocket%E4%BB%A3%E7%90%86/10.png">
-<meta property="article:published_time" content="2021-05-11T14:01:55.000Z">
-<meta property="article:modified_time" content="2021-05-11T18:18:30.908Z">
+<meta property="og:image" content="https://kosakd.github.io/2021/10/29/T00LS%E6%96%87%E7%AB%A0%E6%9B%B4%E6%96%B0%E6%8F%90%E9%86%92%EF%BC%8C%E8%87%AA%E5%8A%A8%E7%AD%BE%E5%88%B0%EF%BC%8C%E5%9F%9F%E5%90%8D%E6%9F%A5%E8%AF%A2/1.png">
+<meta property="og:image" content="https://kosakd.github.io/2021/10/29/T00LS%E6%96%87%E7%AB%A0%E6%9B%B4%E6%96%B0%E6%8F%90%E9%86%92%EF%BC%8C%E8%87%AA%E5%8A%A8%E7%AD%BE%E5%88%B0%EF%BC%8C%E5%9F%9F%E5%90%8D%E6%9F%A5%E8%AF%A2/2.png">
+<meta property="og:image" content="https://kosakd.github.io/2021/10/29/T00LS%E6%96%87%E7%AB%A0%E6%9B%B4%E6%96%B0%E6%8F%90%E9%86%92%EF%BC%8C%E8%87%AA%E5%8A%A8%E7%AD%BE%E5%88%B0%EF%BC%8C%E5%9F%9F%E5%90%8D%E6%9F%A5%E8%AF%A2/3.png">
+<meta property="og:image" content="https://kosakd.github.io/2021/10/29/T00LS%E6%96%87%E7%AB%A0%E6%9B%B4%E6%96%B0%E6%8F%90%E9%86%92%EF%BC%8C%E8%87%AA%E5%8A%A8%E7%AD%BE%E5%88%B0%EF%BC%8C%E5%9F%9F%E5%90%8D%E6%9F%A5%E8%AF%A2/4.png">
+<meta property="og:image" content="https://kosakd.github.io/2021/10/29/T00LS%E6%96%87%E7%AB%A0%E6%9B%B4%E6%96%B0%E6%8F%90%E9%86%92%EF%BC%8C%E8%87%AA%E5%8A%A8%E7%AD%BE%E5%88%B0%EF%BC%8C%E5%9F%9F%E5%90%8D%E6%9F%A5%E8%AF%A2/8.png">
+<meta property="og:image" content="https://kosakd.github.io/2021/10/29/T00LS%E6%96%87%E7%AB%A0%E6%9B%B4%E6%96%B0%E6%8F%90%E9%86%92%EF%BC%8C%E8%87%AA%E5%8A%A8%E7%AD%BE%E5%88%B0%EF%BC%8C%E5%9F%9F%E5%90%8D%E6%9F%A5%E8%AF%A2/9.png">
+<meta property="og:image" content="https://kosakd.github.io/2021/10/29/T00LS%E6%96%87%E7%AB%A0%E6%9B%B4%E6%96%B0%E6%8F%90%E9%86%92%EF%BC%8C%E8%87%AA%E5%8A%A8%E7%AD%BE%E5%88%B0%EF%BC%8C%E5%9F%9F%E5%90%8D%E6%9F%A5%E8%AF%A2/7.png">
+<meta property="og:image" content="https://kosakd.github.io/2021/10/29/T00LS%E6%96%87%E7%AB%A0%E6%9B%B4%E6%96%B0%E6%8F%90%E9%86%92%EF%BC%8C%E8%87%AA%E5%8A%A8%E7%AD%BE%E5%88%B0%EF%BC%8C%E5%9F%9F%E5%90%8D%E6%9F%A5%E8%AF%A2/5.png">
+<meta property="og:image" content="https://kosakd.github.io/2021/10/29/T00LS%E6%96%87%E7%AB%A0%E6%9B%B4%E6%96%B0%E6%8F%90%E9%86%92%EF%BC%8C%E8%87%AA%E5%8A%A8%E7%AD%BE%E5%88%B0%EF%BC%8C%E5%9F%9F%E5%90%8D%E6%9F%A5%E8%AF%A2/6.png">
+<meta property="article:published_time" content="2021-10-29T04:27:49.000Z">
+<meta property="article:modified_time" content="2021-10-29T04:35:21.896Z">
 <meta property="article:author" content="花开陌路’">
-<meta property="article:tag" content="渗透">
 <meta property="article:tag" content="笔记">
-<meta property="article:tag" content="工具分享">
-<meta property="article:tag" content="内网渗透">
+<meta property="article:tag" content="T00LS">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://kosakd.github.io/2021/05/11/%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F%E4%B9%8B%E7%AB%AF%E5%8F%A3%E8%BD%AC%E5%8F%91%EF%BC%8Csocket%E4%BB%A3%E7%90%86/sao.png">
+<meta name="twitter:image" content="https://kosakd.github.io/2021/10/29/T00LS%E6%96%87%E7%AB%A0%E6%9B%B4%E6%96%B0%E6%8F%90%E9%86%92%EF%BC%8C%E8%87%AA%E5%8A%A8%E7%AD%BE%E5%88%B0%EF%BC%8C%E5%9F%9F%E5%90%8D%E6%9F%A5%E8%AF%A2/1.png">
 
 
-<link rel="canonical" href="https://kosakd.github.io/2021/05/11/%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F%E4%B9%8B%E7%AB%AF%E5%8F%A3%E8%BD%AC%E5%8F%91%EF%BC%8Csocket%E4%BB%A3%E7%90%86/">
+<link rel="canonical" href="https://kosakd.github.io/2021/10/29/T00LS%E6%96%87%E7%AB%A0%E6%9B%B4%E6%96%B0%E6%8F%90%E9%86%92%EF%BC%8C%E8%87%AA%E5%8A%A8%E7%AD%BE%E5%88%B0%EF%BC%8C%E5%9F%9F%E5%90%8D%E6%9F%A5%E8%AF%A2/">
 
 
 <script class="page-configurations">
@@ -64,7 +60,7 @@
     lang   : 'zh-CN'
   };
 </script>
-<title>内网渗透之端口转发，socket代理 | Kosakd's Blog</title>
+<title>T00LS文章更新提醒，自动签到，域名查询 | Kosakd's Blog</title>
   
 
 
@@ -195,7 +191,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <section class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AB%AF%E5%8F%A3%E8%BD%AC%E5%8F%91"><span class="nav-number">1.</span> <span class="nav-text">端口转发</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AE%BE%E7%BD%AE%E8%BD%AC%E5%8F%91%E8%A7%84%E5%88%99"><span class="nav-number">1.1.</span> <span class="nav-text">设置转发规则</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AE%BE%E7%BD%AE%E9%98%B2%E7%81%AB%E5%A2%99%E8%A7%84%E5%88%99"><span class="nav-number">1.2.</span> <span class="nav-text">设置防火墙规则</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%A0%E9%99%A4%E8%A7%84%E5%88%99"><span class="nav-number">1.3.</span> <span class="nav-text">删除规则</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#socket5%E4%BB%A3%E7%90%86"><span class="nav-number">2.</span> <span class="nav-text">socket5代理</span></a></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#T00LS%E6%96%87%E7%AB%A0%E6%9B%B4%E6%96%B0%E6%8F%90%E9%86%92%EF%BC%8C%E8%87%AA%E5%8A%A8%E7%AD%BE%E5%88%B0%EF%BC%8C%E5%9F%9F%E5%90%8D%E6%9F%A5%E8%AF%A2"><span class="nav-number">1.</span> <span class="nav-text">T00LS文章更新提醒，自动签到，域名查询</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%AD%A4%E7%A8%8B%E5%BA%8F%E6%98%AF%E5%9F%BA%E4%BA%8E%EF%BC%8CT00LS%E7%9A%84api%E5%92%8Cserver%E9%85%B1api%E5%AE%9E%E7%8E%B0%EF%BC%8C%E7%A8%8B%E5%BA%8F%E8%87%AA%E5%8A%A8%E7%AD%BE%E5%88%B0%EF%BC%8C%E5%92%8C%E6%96%B0%E6%96%87%E7%AB%A0%E6%9B%B4%E6%96%B0%E6%8F%90%E9%86%92"><span class="nav-number">1.0.1.</span> <span class="nav-text">此程序是基于，T00LS的api和server酱api实现，程序自动签到，和新文章更新提醒</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%AD%A4%E7%89%88%E6%9C%AC%EF%BC%8C%E6%98%AF%E4%B8%80%E6%99%9A%E4%B8%8A%E8%B5%B6%E5%B7%A5%E5%81%9A%E5%87%BA%E6%9D%A5%E7%9A%84%EF%BC%8C%E7%AA%81%E7%84%B6%E6%87%92%E7%99%8C%E5%8F%91%E4%BD%9C%E4%B8%8D%E6%83%B3%E4%B8%80%E9%A1%B5%E4%B8%80%E9%A1%B5%E7%BF%BB%E8%AE%BA%E5%9D%9B%EF%BC%8C%E5%B0%B1%E5%86%99%E4%B8%AA%E7%A8%8B%E5%BA%8F%EF%BC%8C%E5%8F%AF%E8%83%BD%E4%BB%A3%E7%A0%81%E6%9C%89%E4%BA%9B%E5%87%8C%E4%B9%B1%EF%BC%8C%E4%B8%8B%E4%B8%80%E4%B8%AA%E7%89%88%E6%9C%AC%E4%BC%9A%E6%95%B4%E6%94%B9%E4%B8%8B%E4%BB%A3%E7%A0%81%EF%BC%8C%E5%B9%B6%E4%B8%94%E6%B7%BB%E5%8A%A0%E5%A4%9A%E4%B8%AA%E6%8F%90%E9%86%92api%EF%BC%8C%E9%92%89%E9%92%89%E6%9C%BA%E5%99%A8%E4%BA%BA%E6%8E%A8%E9%80%81%EF%BC%8Cserver%E9%85%B1%E6%8E%A8%E9%80%81%EF%BC%8CTelegram%E6%9C%BA%E5%99%A8%E4%BA%BA%E6%8E%A8%E9%80%81%EF%BC%8C%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6%E5%B0%86%E4%BC%9A%E5%8D%95%E7%8B%AC%E5%BC%80%E4%B8%80%E4%B8%AAyaml%E6%96%87%E4%BB%B6"><span class="nav-number">1.0.1.1.</span> <span class="nav-text">此版本，是一晚上赶工做出来的，突然懒癌发作不想一页一页翻论坛，就写个程序，可能代码有些凌乱，下一个版本会整改下代码，并且添加多个提醒api，钉钉机器人推送，server酱推送，Telegram机器人推送，配置文件将会单独开一个yaml文件</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#main-go%E4%B8%AD%E5%8F%AF%E4%BB%A5%E9%85%8D%E7%BD%AE"><span class="nav-number">1.0.2.</span> <span class="nav-text">main.go中可以配置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BF%90%E8%A1%8C"><span class="nav-number">1.0.3.</span> <span class="nav-text">运行</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%BB%BA%E8%AE%AE%E5%B8%83%E7%BD%AE%E5%9C%A8%E4%BA%91%E5%87%BD%E6%95%B0%E4%B8%8A%EF%BC%8C%E6%89%A7%E8%A1%8C%E4%B8%80%E6%AC%A1%EF%BC%8C%E4%BC%9A%E4%B8%80%E7%9B%B4%E5%BE%AA%E7%8E%AF%EF%BC%8C%E7%AD%BE%E5%88%B0%E8%84%9A%E6%9C%AC%E4%BC%9A%E6%AF%8F%E8%BF%8724%E5%B0%8F%E6%97%B6%E6%89%A7%E8%A1%8C%E4%B8%80%E6%AC%A1%EF%BC%8C%E6%96%87%E7%AB%A0%E6%9B%B4%E6%96%B0%E4%BC%9A%E6%AF%8F15%E5%88%86%E9%92%9F%E6%9F%A5%E8%AF%A2%E4%B8%80%E6%AC%A1"><span class="nav-number">1.0.3.1.</span> <span class="nav-text">建议布置在云函数上，执行一次，会一直循环，签到脚本会每过24小时执行一次，文章更新会每15分钟查询一次</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9C%80%E5%90%8E%EF%BC%8C%E5%A6%82%E6%9E%9C%E6%83%B3%E8%A6%81%E7%9C%8B%E6%96%87%E7%AB%A0%E6%8E%A8%E9%80%81%E7%9A%84%E6%95%88%E6%9E%9C%EF%BC%8C%E5%8F%AF%E4%BB%A5%E6%8A%8AGetAllArticles-go%EF%BC%8C%E6%96%87%E4%BB%B6%E4%B8%AD%E7%9A%84Put-articles-%E7%9A%84%E6%B3%A8%E9%87%8A"><span class="nav-number">1.0.4.</span> <span class="nav-text">最后，如果想要看文章推送的效果，可以把GetAllArticles.go，文件中的Put_articles()的注释</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%80%E4%B8%AA%E5%BE%88%E7%AE%80%E5%8D%95go%E7%A8%8B%E5%BA%8F"><span class="nav-number">1.0.5.</span> <span class="nav-text">一个很简单go程序</span></a></li></ol></li></ol></li></ol></div>
         </section>
         <!--/noindex-->
 
@@ -293,7 +289,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://kosakd.github.io/2021/05/11/%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F%E4%B9%8B%E7%AB%AF%E5%8F%A3%E8%BD%AC%E5%8F%91%EF%BC%8Csocket%E4%BB%A3%E7%90%86/">
+    <link itemprop="mainEntityOfPage" href="https://kosakd.github.io/2021/10/29/T00LS%E6%96%87%E7%AB%A0%E6%9B%B4%E6%96%B0%E6%8F%90%E9%86%92%EF%BC%8C%E8%87%AA%E5%8A%A8%E7%AD%BE%E5%88%B0%EF%BC%8C%E5%9F%9F%E5%90%8D%E6%9F%A5%E8%AF%A2/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/touxiang.jpg">
@@ -306,7 +302,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          内网渗透之端口转发，socket代理
+          T00LS文章更新提醒，自动签到，域名查询
         </h1>
 
         <div class="post-meta-container">
@@ -316,16 +312,10 @@
         <i class="far fa-calendar"></i>
       </span>
       <span class="post-meta-item-text">发表于</span>
+      
 
-      <time title="创建时间：2021-05-11 22:01:55" itemprop="dateCreated datePublished" datetime="2021-05-11T22:01:55+08:00">2021-05-11</time>
+      <time title="创建时间：2021-10-29 12:27:49 / 修改时间：12:35:21" itemprop="dateCreated datePublished" datetime="2021-10-29T12:27:49+08:00">2021-10-29</time>
     </span>
-      <span class="post-meta-item">
-        <span class="post-meta-item-icon">
-          <i class="far fa-calendar-check"></i>
-        </span>
-        <span class="post-meta-item-text">更新于</span>
-        <time title="修改时间：2021-05-12 02:18:30" itemprop="dateModified" datetime="2021-05-12T02:18:30+08:00">2021-05-12</time>
-      </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
         <i class="far fa-folder"></i>
@@ -337,7 +327,7 @@
     </span>
 
   
-    <span id="/2021/05/11/%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F%E4%B9%8B%E7%AB%AF%E5%8F%A3%E8%BD%AC%E5%8F%91%EF%BC%8Csocket%E4%BB%A3%E7%90%86/" class="post-meta-item leancloud_visitors" data-flag-title="内网渗透之端口转发，socket代理" title="阅读次数">
+    <span id="/2021/10/29/T00LS%E6%96%87%E7%AB%A0%E6%9B%B4%E6%96%B0%E6%8F%90%E9%86%92%EF%BC%8C%E8%87%AA%E5%8A%A8%E7%AD%BE%E5%88%B0%EF%BC%8C%E5%9F%9F%E5%90%8D%E6%9F%A5%E8%AF%A2/" class="post-meta-item leancloud_visitors" data-flag-title="T00LS文章更新提醒，自动签到，域名查询" title="阅读次数">
       <span class="post-meta-item-icon">
         <i class="far fa-eye"></i>
       </span>
@@ -358,14 +348,14 @@
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">本文字数：</span>
-      <span>2k</span>
+      <span>1.1k</span>
     </span>
     <span class="post-meta-item" title="阅读时长">
       <span class="post-meta-item-icon">
         <i class="far fa-clock"></i>
       </span>
       <span class="post-meta-item-text">阅读时长 &asymp;</span>
-      <span>2 分钟</span>
+      <span>1 分钟</span>
     </span>
 </div>
 
@@ -376,52 +366,27 @@
     
     
     <div class="post-body" itemprop="articleBody">
-        <p><img src="/2021/05/11/%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F%E4%B9%8B%E7%AB%AF%E5%8F%A3%E8%BD%AC%E5%8F%91%EF%BC%8Csocket%E4%BB%A3%E7%90%86/sao.png" alt="s"></p>
-<h2 id="端口转发"><a href="#端口转发" class="headerlink" title="端口转发"></a>端口转发</h2><p>当我们获取到一台，边缘（DMZ）服务器的Shell,时该如何进行下一步渗透呢？</p>
-<p>如果我们要进行下一步的渗透操作，这个时候，我们就要先进行内网信息收集，一般DMZ服务器，都会有两个网卡，一个是隔离的外网网卡，一个是内网网卡，但内网是一般都不会通外网的，这个时候，我们就要进行，本地端口转发了（端口映射），这里可以用到win上的工具<strong>netsh</strong></p>
-<a id="more"></a>
+        <h1 id="T00LS文章更新提醒，自动签到，域名查询"><a href="#T00LS文章更新提醒，自动签到，域名查询" class="headerlink" title="T00LS文章更新提醒，自动签到，域名查询"></a>T00LS文章更新提醒，自动签到，域名查询</h1><h3 id="此程序是基于，T00LS的api和server酱api实现，程序自动签到，和新文章更新提醒"><a href="#此程序是基于，T00LS的api和server酱api实现，程序自动签到，和新文章更新提醒" class="headerlink" title="此程序是基于，T00LS的api和server酱api实现，程序自动签到，和新文章更新提醒"></a>此程序是基于，T00LS的api和server酱api实现，程序自动签到，和新文章更新提醒</h3><h4 id="此版本，是一晚上赶工做出来的，突然懒癌发作不想一页一页翻论坛，就写个程序，可能代码有些凌乱，下一个版本会整改下代码，并且添加多个提醒api，钉钉机器人推送，server酱推送，Telegram机器人推送，配置文件将会单独开一个yaml文件"><a href="#此版本，是一晚上赶工做出来的，突然懒癌发作不想一页一页翻论坛，就写个程序，可能代码有些凌乱，下一个版本会整改下代码，并且添加多个提醒api，钉钉机器人推送，server酱推送，Telegram机器人推送，配置文件将会单独开一个yaml文件" class="headerlink" title="此版本，是一晚上赶工做出来的，突然懒癌发作不想一页一页翻论坛，就写个程序，可能代码有些凌乱，下一个版本会整改下代码，并且添加多个提醒api，钉钉机器人推送，server酱推送，Telegram机器人推送，配置文件将会单独开一个yaml文件"></a>此版本，是一晚上赶工做出来的，突然懒癌发作不想一页一页翻论坛，就写个程序，可能代码有些凌乱，下一个版本会整改下代码，并且添加多个提醒api，钉钉机器人推送，server酱推送，Telegram机器人推送，配置文件将会单独开一个yaml文件</h4><a id="more"></a>
 
-<p>**<code>netsh</code>**，是微软Windows的netsh是一个命令行脚本实用工具。使用netsh工具 ，可以查看或更改本地计算机或远程计算机的网络配置。不仅可以在本地计算机上运行这些命令，而且可以在网络上的远程计算机上运行。</p>
-<figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">假设，这台机子是一台web服务器</span><br><span class="line">网卡<span class="number">1</span>:<span class="number">192</span>.<span class="number">168</span>.<span class="number">147</span>.<span class="number">129</span> ~假设为公网ip，可以出外网，但是此网卡不能访问内网</span><br><span class="line"></span><br><span class="line">网卡<span class="number">2</span>:<span class="number">169</span>.<span class="number">254</span>.<span class="number">83</span>.<span class="number">245</span> ~假设为内网ip，可以访问内网资源，但是不能出外网</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-<p><img src="/2021/05/11/%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F%E4%B9%8B%E7%AB%AF%E5%8F%A3%E8%BD%AC%E5%8F%91%EF%BC%8Csocket%E4%BB%A3%E7%90%86/1.png" alt="1"></p>
-<p>我们要做的是，在网卡2，开启个socket5服务，然后将网卡2的socket5服务端口，转到网卡1的端口上，我们就可以连接，网卡1的端口，进行socket5代理，这样就能通过外网进行内网渗透了。</p>
-<p>这里socket5代理，我就用远程连接服务来代替，这样直观了解些</p>
-<h3 id="设置转发规则"><a href="#设置转发规则" class="headerlink" title="设置转发规则"></a>设置转发规则</h3><p><strong>netsh操作需要管理员权限</strong></p>
-<figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">1</span>.先查看下当前配置的转发规则</span><br><span class="line">netsh interface portproxy show all</span><br></pre></td></tr></table></figure>
-<p><img src="/2021/05/11/%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F%E4%B9%8B%E7%AB%AF%E5%8F%A3%E8%BD%AC%E5%8F%91%EF%BC%8Csocket%E4%BB%A3%E7%90%86/3.png" alt="3"></p>
-<p>现在未添加转发规则</p>
-<p>我们来添加一条转发规则，我们把内网的3389端口转发到外网的9696端口</p>
-<figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">netsh interface portproxy add v4tov4 listenport=<span class="number">9696</span> listenaddress=<span class="number">192</span>.<span class="number">168</span>.<span class="number">147</span>.<span class="number">129</span> connectport=<span class="number">3389</span> connectaddress=<span class="number">169</span>.<span class="number">254</span>.<span class="number">83</span>.<span class="number">245</span></span><br><span class="line"></span><br><span class="line"><span class="function">listenport:为网卡1端口</span></span><br><span class="line"><span class="function"><span class="title">listenaddress</span>:为网卡1<span class="title">ip</span></span></span><br><span class="line"><span class="function"><span class="title">connectport</span>:为网卡2端口</span></span><br><span class="line"><span class="function"><span class="title">connectaddress</span>：为网卡2<span class="title">ip</span></span></span><br></pre></td></tr></table></figure>
-<p><img src="/2021/05/11/%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F%E4%B9%8B%E7%AB%AF%E5%8F%A3%E8%BD%AC%E5%8F%91%EF%BC%8Csocket%E4%BB%A3%E7%90%86/4.png" alt="4"></p>
-<h3 id="设置防火墙规则"><a href="#设置防火墙规则" class="headerlink" title="设置防火墙规则"></a>设置防火墙规则</h3><p>规则已经添加进去了，现在我们要查看防火墙，如果开启了防火墙，要对其添加一条，监听端口允许入站规则<br>或者直接关闭防火墙，但一般不推荐关闭防火墙</p>
-<figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">查看防火墙是否开启</span><br><span class="line">netsh firewall show config</span><br><span class="line">关闭防火墙</span><br><span class="line">netsh advfirewall <span class="built_in">set</span> allprofiles state off</span><br><span class="line">开启服防火墙</span><br><span class="line">netsh advfirewall <span class="built_in">set</span> allprofiles state on</span><br></pre></td></tr></table></figure>
-<p><img src="/2021/05/11/%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F%E4%B9%8B%E7%AB%AF%E5%8F%A3%E8%BD%AC%E5%8F%91%EF%BC%8Csocket%E4%BB%A3%E7%90%86/2.png" alt="2"></p>
-<p>当前服务器开启了防火墙，我们要添加一条入站规则</p>
-<figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">添加一条名为test的入站规则，端口放行<span class="number">9696</span></span><br><span class="line">netsh advfirewall firewall add rule name=test <span class="built_in">dir</span>=<span class="keyword">in</span> action=allow protocol=tcp localport=<span class="number">9696</span> </span><br></pre></td></tr></table></figure>
+<h3 id="main-go中可以配置"><a href="#main-go中可以配置" class="headerlink" title="main.go中可以配置"></a>main.go中可以配置</h3><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">action      = <span class="string">&quot;login&quot;</span></span><br><span class="line">username    = <span class="string">&quot;kosakd&quot;</span>                                                  <span class="comment">//用户名</span></span><br><span class="line">password    = <span class="string">&quot;e10adc3949ba59abbe56e057f20f883e&quot;</span>                        <span class="comment">//密码md5 32位</span></span><br><span class="line">questionid  = <span class="string">&quot;1&quot;</span>                                                       <span class="comment">//安全问题ID，默认0为未设置</span></span><br><span class="line">answer      = <span class="string">&quot;kosad&quot;</span>                                                  	<span class="comment">//安全问题答案</span></span><br><span class="line">sendkey     = <span class="string">&quot;SCUxxxxxxxxxxxxxxxxxxx&quot;</span> 									<span class="comment">//Server酱sendkey</span></span><br><span class="line">Url         = <span class="string">&quot;https://www.t00ls.cc/All-articles.json&quot;</span>                  <span class="comment">//api的url</span></span><br><span class="line">ToolsUrl    = <span class="string">&quot;https://www.t00ls.cc&quot;</span>                                    <span class="comment">//tools的url</span></span><br><span class="line">Pages       = <span class="number">10</span>                                                        <span class="comment">//获取的页数</span></span><br><span class="line">PageNumbers = <span class="number">10</span>                                                        <span class="comment">//每页获取多少条数据</span></span><br></pre></td></tr></table></figure>
 
 
-<p><img src="/2021/05/11/%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F%E4%B9%8B%E7%AB%AF%E5%8F%A3%E8%BD%AC%E5%8F%91%EF%BC%8Csocket%E4%BB%A3%E7%90%86/5.png" alt="5"></p>
-<p>添加成功后，我们连接网卡1的9696端口，流量就会转发到网卡2的3389端口上了</p>
-<p><img src="/2021/05/11/%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F%E4%B9%8B%E7%AB%AF%E5%8F%A3%E8%BD%AC%E5%8F%91%EF%BC%8Csocket%E4%BB%A3%E7%90%86/6.png" alt="6"></p>
-<h3 id="删除规则"><a href="#删除规则" class="headerlink" title="删除规则"></a>删除规则</h3><p>端口转发成功了，接下来是，删除规则，当我们干完活记得搽屁股</p>
-<figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">删除指定端口转发规则</span><br><span class="line"></span><br><span class="line">netsh interface portproxy delete v4tov4 listenport=<span class="number">9696</span> listenaddress=</span><br></pre></td></tr></table></figure>
-<p><img src="/2021/05/11/%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F%E4%B9%8B%E7%AB%AF%E5%8F%A3%E8%BD%AC%E5%8F%91%EF%BC%8Csocket%E4%BB%A3%E7%90%86/7.png" alt="7"></p>
-<figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">删除入站规则</span><br><span class="line">netsh advfirewall firewall delete rule name=test <span class="built_in">dir</span>=<span class="keyword">in</span> protocol=tcp localport=<span class="number">9696</span></span><br></pre></td></tr></table></figure>
-<p><img src="/2021/05/11/%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F%E4%B9%8B%E7%AB%AF%E5%8F%A3%E8%BD%AC%E5%8F%91%EF%BC%8Csocket%E4%BB%A3%E7%90%86/8.png" alt="8"></p>
-<h2 id="socket5代理"><a href="#socket5代理" class="headerlink" title="socket5代理"></a>socket5代理</h2><p>当我们获取到DMZ服务器的shell后要进行内网渗透时，我们要对内网资源进行一个信息搜集，我们的扫描器又不能通过外网直接扫描他们的内网，这时侯就要用，socket5代理服务了，在DMZ服务器上运行个socket5代理服务，用代理工具连接，流量就通过DMZ服务器的socket5服务转到内网了，这样我们就能够，扫描到内网了</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">本来，是打算给你们用我写的socket5服务程序的，但是写完后，发现，猪猪侠大佬的s5程序比我写的好，这里就用猪猪侠的s5了，地址如下</span><br><span class="line">https://github.com/ring04h/s5.go</span><br></pre></td></tr></table></figure>
 
 
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">获取编译</span><br><span class="line">git https:&#x2F;&#x2F;github.com&#x2F;ring04h&#x2F;s5.go.git</span><br><span class="line">cd s5.go</span><br><span class="line">go build .\s5.go </span><br><span class="line">.&#x2F;s5.go.exe &#x2F;&#x2F;默认在8080端口开启socket5服务</span><br></pre></td></tr></table></figure>
-<img src="/2021/05/11/%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F%E4%B9%8B%E7%AB%AF%E5%8F%A3%E8%BD%AC%E5%8F%91%EF%BC%8Csocket%E4%BB%A3%E7%90%86/9.png" alt="9" style="zoom: 80%;">
-
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Usage of C:\Users\28601.DESKTOP-7QBTS9F\Desktop\s5.go\s5.exe:</span><br><span class="line">  -addr string</span><br><span class="line">        proxy listen address (default &quot;:8080&quot;)</span><br><span class="line">  -v    should every proxy request be logged to stdout</span><br></pre></td></tr></table></figure>
+<h3 id="运行"><a href="#运行" class="headerlink" title="运行"></a>运行</h3><figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">git clone https://github.com/kosakd/T00ls.git</span><br><span class="line"><span class="built_in">cd</span> T00<span class="built_in">ls</span></span><br><span class="line">linux:</span><br><span class="line">go env <span class="literal">-w</span> linux</span><br><span class="line">go build <span class="literal">-o</span> tools main.go</span><br><span class="line">chmod <span class="number">777</span> tools&amp;&amp;./tools</span><br><span class="line">windows:</span><br><span class="line">go env <span class="literal">-w</span> windows</span><br><span class="line">go build <span class="literal">-o</span> tools.exe main.go</span><br><span class="line">tools.exe</span><br></pre></td></tr></table></figure>
 
 
-<figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">-addr 指定ip端口 </span><br><span class="line">-v 开启程序打印日志</span><br><span class="line">./s5.exe -addr <span class="number">127</span>.<span class="number">0</span>.<span class="number">0</span>.<span class="number">1</span>:<span class="number">9696</span>  #在本地端口<span class="number">9696</span>开启socket5服务</span><br></pre></td></tr></table></figure>
-<p><img src="/2021/05/11/%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F%E4%B9%8B%E7%AB%AF%E5%8F%A3%E8%BD%AC%E5%8F%91%EF%BC%8Csocket%E4%BB%A3%E7%90%86/10.png" alt="10"></p>
-<p>如果不想go程序显示</p>
-
+<p><img src="/2021/10/29/T00LS%E6%96%87%E7%AB%A0%E6%9B%B4%E6%96%B0%E6%8F%90%E9%86%92%EF%BC%8C%E8%87%AA%E5%8A%A8%E7%AD%BE%E5%88%B0%EF%BC%8C%E5%9F%9F%E5%90%8D%E6%9F%A5%E8%AF%A2/1.png" alt="1"></p>
+<p><img src="/2021/10/29/T00LS%E6%96%87%E7%AB%A0%E6%9B%B4%E6%96%B0%E6%8F%90%E9%86%92%EF%BC%8C%E8%87%AA%E5%8A%A8%E7%AD%BE%E5%88%B0%EF%BC%8C%E5%9F%9F%E5%90%8D%E6%9F%A5%E8%AF%A2/2.png" alt="2"></p>
+<h4 id="建议布置在云函数上，执行一次，会一直循环，签到脚本会每过24小时执行一次，文章更新会每15分钟查询一次"><a href="#建议布置在云函数上，执行一次，会一直循环，签到脚本会每过24小时执行一次，文章更新会每15分钟查询一次" class="headerlink" title="建议布置在云函数上，执行一次，会一直循环，签到脚本会每过24小时执行一次，文章更新会每15分钟查询一次"></a>建议布置在云函数上，执行一次，会一直循环，签到脚本会每过24小时执行一次，文章更新会每15分钟查询一次</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">再自己的服务器上布置</span><br><span class="line">go env -w GOOS=linux</span><br><span class="line">go build -o main main.go</span><br><span class="line">chmod 777 main</span><br><span class="line">nohup main &amp;</span><br></pre></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">云函数布置</span><br><span class="line">go env -w GOOS=linux</span><br><span class="line">go build -o main main.go</span><br><span class="line">zip main main.zip</span><br><span class="line">选择go，直接上传zip包，布置函数就行</span><br></pre></td></tr></table></figure>
+<h3 id="最后，如果想要看文章推送的效果，可以把GetAllArticles-go，文件中的Put-articles-的注释"><a href="#最后，如果想要看文章推送的效果，可以把GetAllArticles-go，文件中的Put-articles-的注释" class="headerlink" title="最后，如果想要看文章推送的效果，可以把GetAllArticles.go，文件中的Put_articles()的注释"></a>最后，如果想要看文章推送的效果，可以把GetAllArticles.go，文件中的Put_articles()的注释</h3><p><img src="/2021/10/29/T00LS%E6%96%87%E7%AB%A0%E6%9B%B4%E6%96%B0%E6%8F%90%E9%86%92%EF%BC%8C%E8%87%AA%E5%8A%A8%E7%AD%BE%E5%88%B0%EF%BC%8C%E5%9F%9F%E5%90%8D%E6%9F%A5%E8%AF%A2/3.png" alt="3"></p>
+<p><img src="/2021/10/29/T00LS%E6%96%87%E7%AB%A0%E6%9B%B4%E6%96%B0%E6%8F%90%E9%86%92%EF%BC%8C%E8%87%AA%E5%8A%A8%E7%AD%BE%E5%88%B0%EF%BC%8C%E5%9F%9F%E5%90%8D%E6%9F%A5%E8%AF%A2/4.png" alt="4"></p>
+<p><img src="/2021/10/29/T00LS%E6%96%87%E7%AB%A0%E6%9B%B4%E6%96%B0%E6%8F%90%E9%86%92%EF%BC%8C%E8%87%AA%E5%8A%A8%E7%AD%BE%E5%88%B0%EF%BC%8C%E5%9F%9F%E5%90%8D%E6%9F%A5%E8%AF%A2/8.png" alt="8"><img src="/2021/10/29/T00LS%E6%96%87%E7%AB%A0%E6%9B%B4%E6%96%B0%E6%8F%90%E9%86%92%EF%BC%8C%E8%87%AA%E5%8A%A8%E7%AD%BE%E5%88%B0%EF%BC%8C%E5%9F%9F%E5%90%8D%E6%9F%A5%E8%AF%A2/9.png" alt="9"></p>
+<p><img src="/2021/10/29/T00LS%E6%96%87%E7%AB%A0%E6%9B%B4%E6%96%B0%E6%8F%90%E9%86%92%EF%BC%8C%E8%87%AA%E5%8A%A8%E7%AD%BE%E5%88%B0%EF%BC%8C%E5%9F%9F%E5%90%8D%E6%9F%A5%E8%AF%A2/7.png"></p>
+<p><img src="/2021/10/29/T00LS%E6%96%87%E7%AB%A0%E6%9B%B4%E6%96%B0%E6%8F%90%E9%86%92%EF%BC%8C%E8%87%AA%E5%8A%A8%E7%AD%BE%E5%88%B0%EF%BC%8C%E5%9F%9F%E5%90%8D%E6%9F%A5%E8%AF%A2/5.png" alt="5"></p>
+<p><img src="/2021/10/29/T00LS%E6%96%87%E7%AB%A0%E6%9B%B4%E6%96%B0%E6%8F%90%E9%86%92%EF%BC%8C%E8%87%AA%E5%8A%A8%E7%AD%BE%E5%88%B0%EF%BC%8C%E5%9F%9F%E5%90%8D%E6%9F%A5%E8%AF%A2/6.png" alt="6"></p>
+<h3 id="一个很简单go程序"><a href="#一个很简单go程序" class="headerlink" title="一个很简单go程序"></a>一个很简单go程序</h3>
     </div>
 
     
@@ -438,7 +403,7 @@
   </li>
   <li class="post-copyright-link">
       <strong>本文链接：</strong>
-      <a href="https://kosakd.github.io/2021/05/11/%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F%E4%B9%8B%E7%AB%AF%E5%8F%A3%E8%BD%AC%E5%8F%91%EF%BC%8Csocket%E4%BB%A3%E7%90%86/" title="内网渗透之端口转发，socket代理">https://kosakd.github.io/2021/05/11/内网渗透之端口转发，socket代理/</a>
+      <a href="https://kosakd.github.io/2021/10/29/T00LS%E6%96%87%E7%AB%A0%E6%9B%B4%E6%96%B0%E6%8F%90%E9%86%92%EF%BC%8C%E8%87%AA%E5%8A%A8%E7%AD%BE%E5%88%B0%EF%BC%8C%E5%9F%9F%E5%90%8D%E6%9F%A5%E8%AF%A2/" title="T00LS文章更新提醒，自动签到，域名查询">https://kosakd.github.io/2021/10/29/T00LS文章更新提醒，自动签到，域名查询/</a>
   </li>
   <li class="post-copyright-license">
     <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/zh-CN" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
@@ -447,24 +412,19 @@
 </div>
 
           <div class="post-tags">
-              <a href="/tags/%E6%B8%97%E9%80%8F/" rel="tag"># 渗透</a>
               <a href="/tags/%E7%AC%94%E8%AE%B0/" rel="tag"># 笔记</a>
-              <a href="/tags/%E5%B7%A5%E5%85%B7%E5%88%86%E4%BA%AB/" rel="tag"># 工具分享</a>
-              <a href="/tags/%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F/" rel="tag"># 内网渗透</a>
+              <a href="/tags/T00LS/" rel="tag"># T00LS</a>
           </div>
 
         
 
           <div class="post-nav">
             <div class="post-nav-item">
-                <a href="/2021/05/09/%E5%AE%8C%E7%BE%8E%E9%BB%91%E8%8B%B9%E6%9E%9C%E4%B9%8BWiFi%E7%83%AD%E5%90%AF%E5%8A%A8/" rel="prev" title="完美黑苹果之WiFi热启动">
-                  <i class="fa fa-chevron-left"></i> 完美黑苹果之WiFi热启动
+                <a href="/2021/07/04/AWVS14_Tips/" rel="prev" title="AWVS14_Tips">
+                  <i class="fa fa-chevron-left"></i> AWVS14_Tips
                 </a>
             </div>
             <div class="post-nav-item">
-                <a href="/2021/05/12/Xmind%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E/" rel="next" title="Xmind命令执行漏洞复现">
-                  Xmind命令执行漏洞复现 <i class="fa fa-chevron-right"></i>
-                </a>
             </div>
           </div>
     </footer>
