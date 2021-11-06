@@ -1,0 +1,664 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.3.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.1/css/all.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css">
+
+<script class="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"kosakd.github.io","root":"/","images":"/images","scheme":"Gemini","version":"8.1.0","exturl":false,"sidebar":{"position":"right","display":"post","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}};
+  </script>
+<meta name="description" content="实现server酱同款微信推送 这次是因为，新版server酱要收费，还限制一分钟，只能推送5条信息，以前一直用的老版本的，但是老版本的也限制了推送数量，每天一百条，就麻烦，所以就不麻烦service酱的服务器来做推送服务了，咱们自己造一个，原理很简的，就是调用微信公众号的接口，来实现模板消息推送">
+<meta property="og:type" content="article">
+<meta property="og:title" content="实现server酱同款微信推送">
+<meta property="og:url" content="https://kosakd.github.io/2021/11/06/%E5%AE%9E%E7%8E%B0server%E9%85%B1%E5%90%8C%E6%AC%BE%E5%BE%AE%E4%BF%A1%E6%8E%A8%E9%80%81/index.html">
+<meta property="og:site_name" content="Kosakd&#39;s Blog">
+<meta property="og:description" content="实现server酱同款微信推送 这次是因为，新版server酱要收费，还限制一分钟，只能推送5条信息，以前一直用的老版本的，但是老版本的也限制了推送数量，每天一百条，就麻烦，所以就不麻烦service酱的服务器来做推送服务了，咱们自己造一个，原理很简的，就是调用微信公众号的接口，来实现模板消息推送">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://kosakd.github.io/2021/11/06/%E5%AE%9E%E7%8E%B0server%E9%85%B1%E5%90%8C%E6%AC%BE%E5%BE%AE%E4%BF%A1%E6%8E%A8%E9%80%81/Users/28601.DESKTOP-7QBTS9F/Desktop/Push/img/10.gif">
+<meta property="og:image" content="https://kosakd.github.io/2021/11/06/%E5%AE%9E%E7%8E%B0server%E9%85%B1%E5%90%8C%E6%AC%BE%E5%BE%AE%E4%BF%A1%E6%8E%A8%E9%80%81/Users/28601.DESKTOP-7QBTS9F/Desktop/Push/img/6.png">
+<meta property="og:image" content="https://kosakd.github.io/2021/11/06/%E5%AE%9E%E7%8E%B0server%E9%85%B1%E5%90%8C%E6%AC%BE%E5%BE%AE%E4%BF%A1%E6%8E%A8%E9%80%81/Users/28601.DESKTOP-7QBTS9F/Desktop/Push/img/7.png">
+<meta property="og:image" content="https://kosakd.github.io/2021/11/06/%E5%AE%9E%E7%8E%B0server%E9%85%B1%E5%90%8C%E6%AC%BE%E5%BE%AE%E4%BF%A1%E6%8E%A8%E9%80%81/Users/28601.DESKTOP-7QBTS9F/Desktop/Push/img/8.png">
+<meta property="og:image" content="https://kosakd.github.io/2021/11/06/%E5%AE%9E%E7%8E%B0server%E9%85%B1%E5%90%8C%E6%AC%BE%E5%BE%AE%E4%BF%A1%E6%8E%A8%E9%80%81/Users/28601.DESKTOP-7QBTS9F/Desktop/Push/img/1.png">
+<meta property="og:image" content="https://kosakd.github.io/2021/11/06/%E5%AE%9E%E7%8E%B0server%E9%85%B1%E5%90%8C%E6%AC%BE%E5%BE%AE%E4%BF%A1%E6%8E%A8%E9%80%81/Users/28601.DESKTOP-7QBTS9F/Desktop/Push/img/2.png">
+<meta property="og:image" content="https://kosakd.github.io/2021/11/06/%E5%AE%9E%E7%8E%B0server%E9%85%B1%E5%90%8C%E6%AC%BE%E5%BE%AE%E4%BF%A1%E6%8E%A8%E9%80%81/Users/28601.DESKTOP-7QBTS9F/Desktop/Push/img/3.png">
+<meta property="og:image" content="https://kosakd.github.io/2021/11/06/%E5%AE%9E%E7%8E%B0server%E9%85%B1%E5%90%8C%E6%AC%BE%E5%BE%AE%E4%BF%A1%E6%8E%A8%E9%80%81/Users/28601.DESKTOP-7QBTS9F/Desktop/Push/img/4.png">
+<meta property="og:image" content="https://kosakd.github.io/2021/11/06/%E5%AE%9E%E7%8E%B0server%E9%85%B1%E5%90%8C%E6%AC%BE%E5%BE%AE%E4%BF%A1%E6%8E%A8%E9%80%81/Users/28601.DESKTOP-7QBTS9F/Desktop/Push/img/5.png">
+<meta property="og:image" content="https://kosakd.github.io/2021/11/06/%E5%AE%9E%E7%8E%B0server%E9%85%B1%E5%90%8C%E6%AC%BE%E5%BE%AE%E4%BF%A1%E6%8E%A8%E9%80%81/9.png">
+<meta property="article:published_time" content="2021-11-06T10:04:55.000Z">
+<meta property="article:modified_time" content="2021-11-06T10:07:49.862Z">
+<meta property="article:author" content="花开陌路’">
+<meta property="article:tag" content="笔记">
+<meta property="article:tag" content="工具">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://kosakd.github.io/2021/11/06/%E5%AE%9E%E7%8E%B0server%E9%85%B1%E5%90%8C%E6%AC%BE%E5%BE%AE%E4%BF%A1%E6%8E%A8%E9%80%81/Users/28601.DESKTOP-7QBTS9F/Desktop/Push/img/10.gif">
+
+
+<link rel="canonical" href="https://kosakd.github.io/2021/11/06/%E5%AE%9E%E7%8E%B0server%E9%85%B1%E5%90%8C%E6%AC%BE%E5%BE%AE%E4%BF%A1%E6%8E%A8%E9%80%81/">
+
+
+<script class="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+<title>实现server酱同款微信推送 | Kosakd's Blog</title>
+  
+
+
+
+  <noscript>
+  <style>
+  body { margin-top: 2rem; }
+
+  .use-motion .menu-item,
+  .use-motion .sidebar,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header {
+    visibility: visible;
+  }
+
+  .use-motion .header,
+  .use-motion .site-brand-container .toggle,
+  .use-motion .footer { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle,
+  .use-motion .custom-logo-image {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line {
+    transform: scaleX(1);
+  }
+
+  .search-pop-overlay, .sidebar-nav { display: none; }
+  .sidebar-panel { display: block; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+  <a target="_blank" rel="noopener" href="https://github.com/honyui" class="github-corner" aria-label="View source on GitHub"><svg width="80" height="80" viewBox="0 0 250 250" style="fill:#70B7FD; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <h1 class="site-title">Kosakd's Blog</h1>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签<span class="badge">14</span></a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类<span class="badge">2</span></a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">14</span></a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <section class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%AE%9E%E7%8E%B0server%E9%85%B1%E5%90%8C%E6%AC%BE%E5%BE%AE%E4%BF%A1%E6%8E%A8%E9%80%81"><span class="nav-number">1.</span> <span class="nav-text">实现server酱同款微信推送</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6"><span class="nav-number">1.1.</span> <span class="nav-text">配置文件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%88%9B%E5%BB%BA%E4%B8%80%E4%B8%AA%E6%95%B0%E6%8D%AE%E5%BA%93%EF%BC%8C%E5%AF%BC%E5%85%A5sql%E6%96%87%E4%BB%B6"><span class="nav-number">1.2.</span> <span class="nav-text">创建一个数据库，导入sql文件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%BF%90%E8%A1%8C"><span class="nav-number">1.3.</span> <span class="nav-text">运行</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%8B%93%E5%B1%95"><span class="nav-number">1.4.</span> <span class="nav-text">拓展</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2%E5%BE%AE%E4%BF%A1%E5%85%AC%E4%BC%97%E5%8F%B7%EF%BC%9A"><span class="nav-number">1.5.</span> <span class="nav-text">个人博客微信公众号：</span></a></li></ol></li></ol></div>
+        </section>
+        <!--/noindex-->
+
+        <section class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="花开陌路’"
+      src="/images/touxiang.jpg">
+  <p class="site-author-name" itemprop="name">花开陌路’</p>
+  <div class="site-description" itemprop="description">朝闻道，夕死可矣。——语出《论语·里仁》</div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">14</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">2</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">14</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/kosakd" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;kosakd" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:kosakd@foxmail.com" title="E-Mail → mailto:kosakd@foxmail.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+  <div class="cc-license site-overview-item animated" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/zh-CN" class="cc-opacity" rel="noopener" target="_blank"><img src="/images/cc-by-nc-sa.svg" alt="Creative Commons"></a>
+  </div>
+
+
+  <div class="links-of-blogroll site-overview-item animated">
+    <div class="links-of-blogroll-title"><i class="fa fa-globe fa-fw"></i>
+      友情链接
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="https://space.bilibili.com/49553978" title="https:&#x2F;&#x2F;space.bilibili.com&#x2F;49553978" rel="noopener" target="_blank">花开陌路’</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="/images/jl.png" title="&#x2F;images&#x2F;jl.png">交流群</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://drunkmars.top/" title="https:&#x2F;&#x2F;drunkmars.top&#x2F;" rel="noopener" target="_blank">Drunkmars</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://blog.zygd.site/" title="https:&#x2F;&#x2F;blog.zygd.site" rel="noopener" target="_blank">XR-SEC</a>
+        </li>
+    </ul>
+  </div>
+
+        </section>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://kosakd.github.io/2021/11/06/%E5%AE%9E%E7%8E%B0server%E9%85%B1%E5%90%8C%E6%AC%BE%E5%BE%AE%E4%BF%A1%E6%8E%A8%E9%80%81/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/touxiang.jpg">
+      <meta itemprop="name" content="花开陌路’">
+      <meta itemprop="description" content="朝闻道，夕死可矣。——语出《论语·里仁》">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Kosakd's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          实现server酱同款微信推送
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2021-11-06 18:04:55 / 修改时间：18:07:49" itemprop="dateCreated datePublished" datetime="2021-11-06T18:04:55+08:00">2021-11-06</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E6%8A%80%E6%9C%AF%E5%88%86%E4%BA%AB/" itemprop="url" rel="index"><span itemprop="name">技术分享</span></a>
+        </span>
+    </span>
+
+  
+    <span id="/2021/11/06/%E5%AE%9E%E7%8E%B0server%E9%85%B1%E5%90%8C%E6%AC%BE%E5%BE%AE%E4%BF%A1%E6%8E%A8%E9%80%81/" class="post-meta-item leancloud_visitors" data-flag-title="实现server酱同款微信推送" title="阅读次数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span class="leancloud-visitors-count"></span>
+    </span>
+    <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
+      </div>
+      <div class="post-meta">
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>2.7k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>2 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h1 id="实现server酱同款微信推送"><a href="#实现server酱同款微信推送" class="headerlink" title="实现server酱同款微信推送"></a>实现server酱同款微信推送</h1><p><img src="/2021/11/06/%E5%AE%9E%E7%8E%B0server%E9%85%B1%E5%90%8C%E6%AC%BE%E5%BE%AE%E4%BF%A1%E6%8E%A8%E9%80%81/Users/28601.DESKTOP-7QBTS9F/Desktop/Push/img/10.gif" alt="10"></p>
+<p>这次是因为，新版server酱要收费，还限制一分钟，只能推送5条信息，以前一直用的老版本的，但是老版本的也限制了推送数量，每天一百条，就麻烦，所以就不麻烦service酱的服务器来做推送服务了，咱们自己造一个，原理很简的，就是调用微信公众号的接口，来实现模板消息推送</p>
+<a id="more"></a>
+
+<p>应为我的公众号再创建的时候选择的是个人，所以不能进行认证，也就不能给用户推送模板消息，所以此程序是基于微信公众平台接口测试，来实现的微信公众号消息推送的，每个人都可以到这里去申请测试号</p>
+<p><code>https://mp.weixin.qq.com/debug/cgi-bin/sandbox?t=sandbox/login</code></p>
+<p>账号登录成功后，把appID，appsecret，写入配置文件，</p>
+<p><img src="/2021/11/06/%E5%AE%9E%E7%8E%B0server%E9%85%B1%E5%90%8C%E6%AC%BE%E5%BE%AE%E4%BF%A1%E6%8E%A8%E9%80%81/Users/28601.DESKTOP-7QBTS9F/Desktop/Push/img/6.png" alt="6"></p>
+<p>然后再测试号二维码，扫描关注测试公众号，会获得一个微信号，把获取的微信号写入数据库表中，详情看下面数据库配置，应为我的公众号不能认证，也就没有写用户注册的功能，只能手动将用户消息添加到数据库中</p>
+<p><img src="/2021/11/06/%E5%AE%9E%E7%8E%B0server%E9%85%B1%E5%90%8C%E6%AC%BE%E5%BE%AE%E4%BF%A1%E6%8E%A8%E9%80%81/Users/28601.DESKTOP-7QBTS9F/Desktop/Push/img/7.png" alt="7"></p>
+<p>最后在模板消息接口新增模板</p>
+<p>模板标题随意填写，可以写，文章推送</p>
+<p>模板内容：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&#123;&#123;title1.DATA&#125;&#125;</span><br><span class="line">&#123;&#123;title2.DATA&#125;&#125; &#123;&#123;content1.DATA&#125;&#125;</span><br><span class="line">&#123;&#123;title3.DATA&#125;&#125; &#123;&#123;content2.DATA&#125;&#125;</span><br><span class="line">&#123;&#123;title4.DATA&#125;&#125; &#123;&#123;content3.DATA&#125;&#125;</span><br></pre></td></tr></table></figure>
+<p>配置完成后，会有一个模板ID，把模板id，写入配置文件中的，Templateid中，一切都配置完成后，即可运行程序</p>
+<p><img src="/2021/11/06/%E5%AE%9E%E7%8E%B0server%E9%85%B1%E5%90%8C%E6%AC%BE%E5%BE%AE%E4%BF%A1%E6%8E%A8%E9%80%81/Users/28601.DESKTOP-7QBTS9F/Desktop/Push/img/8.png" alt="8"></p>
+<p>消息推送：</p>
+<p>urlPath：/msg?msgcontent=这是消息内容&amp;msgtitle=这是消息标题&amp;nameid=kosakd</p>
+<p>三个参数，msgtitle : 消息标题，msgcontent : 消息内容，nameid : 用户名</p>
+<p>可以GET/POST提交请求</p>
+<p>成功推送发送返回：推送成功，</p>
+<p>则推送失败否则返回：参数错误。</p>
+<h2 id="配置文件"><a href="#配置文件" class="headerlink" title="配置文件"></a>配置文件</h2><p>配置文件在，/conf/conf.yaml，具体参数看注释有详解</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 配置文件</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="attr">Server:</span></span><br><span class="line">  <span class="attr">Ip:</span> <span class="string">&quot;&quot;</span> <span class="comment">#这是服务ip,留空代表本机</span></span><br><span class="line">  <span class="attr">Port:</span> <span class="string">&quot;80&quot;</span> <span class="comment">#服务端口号</span></span><br><span class="line">  <span class="attr">ReadTimeout:</span> <span class="number">10</span> <span class="comment">#web服务请求延迟,单位为秒</span></span><br><span class="line">  <span class="attr">WriteTimeout:</span> <span class="number">10</span> <span class="comment">#web服务响应延迟，单位为秒</span></span><br><span class="line"></span><br><span class="line"><span class="attr">VxPush:</span></span><br><span class="line">  <span class="attr">Appid:</span> <span class="string">&quot;xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx&quot;</span> <span class="comment">#appID</span></span><br><span class="line">  <span class="attr">Secret:</span> <span class="string">&quot;xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx&quot;</span> <span class="comment">#appsecret</span></span><br><span class="line">  <span class="attr">Templateid:</span> <span class="string">&quot;tmsxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx&quot;</span> <span class="comment">#模板ID</span></span><br><span class="line">  <span class="attr">Url:</span> <span class="string">&quot;https://kosakd.top&quot;</span> <span class="comment">#推送到微信模板消息中的url，自定义</span></span><br><span class="line"></span><br><span class="line"><span class="attr">Mysql:</span></span><br><span class="line">  <span class="attr">Addr:</span> <span class="string">&quot;localhost:3306&quot;</span> <span class="comment">#mysql服务连接的id和端口</span></span><br><span class="line">  <span class="attr">User:</span> <span class="string">&quot;kosakd&quot;</span> <span class="comment">#mysql的用户名</span></span><br><span class="line">  <span class="attr">Passowrd:</span> <span class="string">&quot;kosakd&quot;</span> <span class="comment">#mysql的用户密码</span></span><br><span class="line">  <span class="attr">DbName:</span> <span class="string">&quot;testpush&quot;</span> <span class="comment">#mysql的指定数据库名</span></span><br><span class="line">  </span><br><span class="line">  </span><br></pre></td></tr></table></figure>
+
+
+
+
+<h2 id="创建一个数据库，导入sql文件"><a href="#创建一个数据库，导入sql文件" class="headerlink" title="创建一个数据库，导入sql文件"></a>创建一个数据库，导入sql文件</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">CREATE DATABASE IF NOT EXISTS testPush DEFAULT CHARSET utf8 COLLATE utf8_general_ci;</span><br><span class="line"></span><br><span class="line">use testPush;</span><br><span class="line"></span><br><span class="line">source testpush.sql;</span><br><span class="line">--最后手动添加一条用户数据，（用户名，关注公众号的微信号，这里的微信号是指获取关注测试公众号的微信号）</span><br><span class="line">INSERT INTO &#96;userpush&#96; VALUES (&#39;kosakd&#39;, &#39;o-xxxxxx&#39;);</span><br></pre></td></tr></table></figure>
+<p><img src="/2021/11/06/%E5%AE%9E%E7%8E%B0server%E9%85%B1%E5%90%8C%E6%AC%BE%E5%BE%AE%E4%BF%A1%E6%8E%A8%E9%80%81/Users/28601.DESKTOP-7QBTS9F/Desktop/Push/img/1.png" alt="1"></p>
+<h2 id="运行"><a href="#运行" class="headerlink" title="运行"></a>运行</h2><ul>
+<li>​    可以直接下载对应系统，编译好了的文件，设置下配置文件，就可以直接运行，当然要确保，mysql服务开启了，数据库和数据表创建了</li>
+</ul>
+<p><img src="/2021/11/06/%E5%AE%9E%E7%8E%B0server%E9%85%B1%E5%90%8C%E6%AC%BE%E5%BE%AE%E4%BF%A1%E6%8E%A8%E9%80%81/Users/28601.DESKTOP-7QBTS9F/Desktop/Push/img/2.png" alt="2"></p>
+<p>直接运行pushServerV1.1.exe,然后访问，你的web服务器，path / 正常的话会显示</p>
+<p><img src="/2021/11/06/%E5%AE%9E%E7%8E%B0server%E9%85%B1%E5%90%8C%E6%AC%BE%E5%BE%AE%E4%BF%A1%E6%8E%A8%E9%80%81/Users/28601.DESKTOP-7QBTS9F/Desktop/Push/img/3.png" alt="3"></p>
+<p> 发送一条消息，/msgpush?msgcontent=这是内容111111&amp;msgtitle=这是2222标题&amp;nameid=kosakd</p>
+<p>成功推送发送，推送成功，否则是，参数错误，则推送失败</p>
+<p><img src="/2021/11/06/%E5%AE%9E%E7%8E%B0server%E9%85%B1%E5%90%8C%E6%AC%BE%E5%BE%AE%E4%BF%A1%E6%8E%A8%E9%80%81/Users/28601.DESKTOP-7QBTS9F/Desktop/Push/img/4.png" alt="4"><img src="/2021/11/06/%E5%AE%9E%E7%8E%B0server%E9%85%B1%E5%90%8C%E6%AC%BE%E5%BE%AE%E4%BF%A1%E6%8E%A8%E9%80%81/Users/28601.DESKTOP-7QBTS9F/Desktop/Push/img/5.png" alt="2"></p>
+<ul>
+<li><p>编译运行</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">git clone https:&#x2F;&#x2F;github.com&#x2F;kosakd&#x2F;kosakdPush.git</span><br><span class="line">cd kosakdPush</span><br><span class="line">linux:</span><br><span class="line">go env -w GOOS&#x3D;linux</span><br><span class="line">go build -o kosakdPush main.go</span><br><span class="line">chmod 777 kosakdPush&amp;&amp;.&#x2F;kosakdPush</span><br><span class="line">windows:</span><br><span class="line">go env -w GOOS&#x3D;windows</span><br><span class="line">go build -o kosakdPush.exe main.go</span><br><span class="line">kosakdPush.exe</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+
+
+
+</li>
+</ul>
+<h2 id="拓展"><a href="#拓展" class="headerlink" title="拓展"></a>拓展</h2><p>这个版本的程序还是只有一个微信推送功能，你们有想法可以，去扩展接口，增加一些推送接口，比如说，企业微信，钉钉，pustPuls，tg，这些，只要写对应的推送功能函数就行，在数据表中，添加给关键字，来选择是什么推送，还可以多设置几个推送模板，实现不同消息模板推送，这样一眼就能够看出来是，文章推送，还是主机上线，还是钓鱼上线，最主要的是这个程序也是个整合推送接口，看你怎么使用了，结合自己的工具来实现消息实时推送了，比如说爬虫，钓鱼，漏洞扫描结果，这些需要长时间才出结果的程序，最后可以写一个app，来查询当前用户发送的所有消息，类似于server酱的app，服务器端写一个接口放出加密的所有信息，app接受解密显示（以上这些功能我已经再最新版本实现了，但是为了程序安全，还是只放出这个版本出来 ：）</p>
+<h2 id="个人博客微信公众号："><a href="#个人博客微信公众号：" class="headerlink" title="个人博客微信公众号："></a>个人博客微信公众号：</h2><p>Blog,<a target="_blank" rel="noopener" href="https://kosakd.top/">kosakd.top</a></p>
+<p>公众号：kosakd</p>
+<p><img src="/2021/11/06/%E5%AE%9E%E7%8E%B0server%E9%85%B1%E5%90%8C%E6%AC%BE%E5%BE%AE%E4%BF%A1%E6%8E%A8%E9%80%81/9.png" alt="9"></p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>花开陌路’
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="https://kosakd.github.io/2021/11/06/%E5%AE%9E%E7%8E%B0server%E9%85%B1%E5%90%8C%E6%AC%BE%E5%BE%AE%E4%BF%A1%E6%8E%A8%E9%80%81/" title="实现server酱同款微信推送">https://kosakd.github.io/2021/11/06/实现server酱同款微信推送/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/zh-CN" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/%E7%AC%94%E8%AE%B0/" rel="tag"># 笔记</a>
+              <a href="/tags/%E5%B7%A5%E5%85%B7/" rel="tag"># 工具</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2021/10/29/T00LS%E6%96%87%E7%AB%A0%E6%9B%B4%E6%96%B0%E6%8F%90%E9%86%92%EF%BC%8C%E8%87%AA%E5%8A%A8%E7%AD%BE%E5%88%B0%EF%BC%8C%E5%9F%9F%E5%90%8D%E6%9F%A5%E8%AF%A2/" rel="prev" title="T00LS文章更新提醒，自动签到，域名查询">
+                  <i class="fa fa-chevron-left"></i> T00LS文章更新提醒，自动签到，域名查询
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      const activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      const commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">花开陌路’</span>
+</div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+    <span title="站点总字数">27k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">25 分钟</span>
+  </span>
+</div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+    <script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+    </div>
+  </footer>
+
+  
+  <script src="//cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+<script>
+  (function() {
+    function leancloudSelector(url) {
+      url = encodeURI(url);
+      return document.getElementById(url).querySelector('.leancloud-visitors-count');
+    }
+
+    function addCount(Counter) {
+      const visitors = document.querySelector('.leancloud_visitors');
+      const url = decodeURI(visitors.id);
+      const title = visitors.dataset.flagTitle;
+
+      Counter('get', '/classes/Counter?where=' + encodeURIComponent(JSON.stringify({ url })))
+        .then(response => response.json())
+        .then(({ results }) => {
+          if (results.length > 0) {
+            const counter = results[0];
+            leancloudSelector(url).innerText = counter.time + 1;
+            Counter('put', '/classes/Counter/' + counter.objectId, { time: { '__op': 'Increment', 'amount': 1 } })
+              .catch(error => {
+                console.error('Failed to save visitor count', error);
+              });
+          } else {
+              Counter('post', '/classes/Counter', { title, url, time: 1 })
+                .then(response => response.json())
+                .then(() => {
+                  leancloudSelector(url).innerText = 1;
+                })
+                .catch(error => {
+                  console.error('Failed to create', error);
+                });
+          }
+        })
+        .catch(error => {
+          console.error('LeanCloud Counter Error', error);
+        });
+    }
+
+    function showTime(Counter) {
+      const visitors = document.querySelectorAll('.leancloud_visitors');
+      const entries = [...visitors].map(element => {
+        return decodeURI(element.id);
+      });
+
+      Counter('get', '/classes/Counter?where=' + encodeURIComponent(JSON.stringify({ url: { '$in': entries } })))
+        .then(response => response.json())
+        .then(({ results }) => {
+          for (let url of entries) {
+            const target = results.find(item => item.url === url);
+            leancloudSelector(url).innerText = target ? target.time : 0;
+          }
+        })
+        .catch(error => {
+          console.error('LeanCloud Counter Error', error);
+        });
+    }
+
+    const { app_id, app_key, server_url } = {"enable":true,"app_id":"gF7Poz0cTuckolpWrCfYGvtE-gzGzoHsz","app_key":"5jhRfVVUhhJhosdWxiVM6xbd","server_url":"https://gf7poz0c.lc-cn-n1-shared.com"};
+    function fetchData(api_server) {
+      const Counter = (method, url, data) => {
+        return fetch(`${api_server}/1.1${url}`, {
+          method,
+          headers: {
+            'X-LC-Id'     : app_id,
+            'X-LC-Key'    : app_key,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(data)
+        });
+      };
+      if (CONFIG.page.isPost) {
+        if (CONFIG.hostname !== location.hostname) return;
+        addCount(Counter);
+      } else if (document.querySelectorAll('.post-title-link').length >= 1) {
+        showTime(Counter);
+      }
+    }
+
+    const api_server = app_id.slice(-9) === '-MdYXbMMI' ? `https://${app_id.slice(0, 8).toLowerCase()}.api.lncldglobal.com` : server_url;
+
+    if (api_server) {
+      fetchData(api_server);
+    } else {
+      fetch('https://app-router.leancloud.cn/2/route?appId=' + app_id)
+        .then(response => response.json())
+        .then(({ api_server }) => {
+          fetchData('https://' + api_server);
+        });
+    }
+  })();
+</script>
+
+
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"model":{"jsonPath":"/live2dw/assets/wanko.model.json"},"display":{"position":"right","width":150,"height":300},"mobile":{"show":false},"log":false});</script></body>
+</html>
