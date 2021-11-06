@@ -30,23 +30,23 @@
 <meta property="og:site_name" content="Kosakd&#39;s Blog">
 <meta property="og:description" content="实现server酱同款微信推送 这次是因为，新版server酱要收费，还限制一分钟，只能推送5条信息，以前一直用的老版本的，但是老版本的也限制了推送数量，每天一百条，就麻烦，所以就不麻烦service酱的服务器来做推送服务了，咱们自己造一个，原理很简的，就是调用微信公众号的接口，来实现模板消息推送">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://kosakd.github.io/2021/11/06/%E5%AE%9E%E7%8E%B0server%E9%85%B1%E5%90%8C%E6%AC%BE%E5%BE%AE%E4%BF%A1%E6%8E%A8%E9%80%81/Users/28601.DESKTOP-7QBTS9F/Desktop/Push/img/10.gif">
-<meta property="og:image" content="https://kosakd.github.io/2021/11/06/%E5%AE%9E%E7%8E%B0server%E9%85%B1%E5%90%8C%E6%AC%BE%E5%BE%AE%E4%BF%A1%E6%8E%A8%E9%80%81/Users/28601.DESKTOP-7QBTS9F/Desktop/Push/img/6.png">
-<meta property="og:image" content="https://kosakd.github.io/2021/11/06/%E5%AE%9E%E7%8E%B0server%E9%85%B1%E5%90%8C%E6%AC%BE%E5%BE%AE%E4%BF%A1%E6%8E%A8%E9%80%81/Users/28601.DESKTOP-7QBTS9F/Desktop/Push/img/7.png">
-<meta property="og:image" content="https://kosakd.github.io/2021/11/06/%E5%AE%9E%E7%8E%B0server%E9%85%B1%E5%90%8C%E6%AC%BE%E5%BE%AE%E4%BF%A1%E6%8E%A8%E9%80%81/Users/28601.DESKTOP-7QBTS9F/Desktop/Push/img/8.png">
-<meta property="og:image" content="https://kosakd.github.io/2021/11/06/%E5%AE%9E%E7%8E%B0server%E9%85%B1%E5%90%8C%E6%AC%BE%E5%BE%AE%E4%BF%A1%E6%8E%A8%E9%80%81/Users/28601.DESKTOP-7QBTS9F/Desktop/Push/img/1.png">
-<meta property="og:image" content="https://kosakd.github.io/2021/11/06/%E5%AE%9E%E7%8E%B0server%E9%85%B1%E5%90%8C%E6%AC%BE%E5%BE%AE%E4%BF%A1%E6%8E%A8%E9%80%81/Users/28601.DESKTOP-7QBTS9F/Desktop/Push/img/2.png">
-<meta property="og:image" content="https://kosakd.github.io/2021/11/06/%E5%AE%9E%E7%8E%B0server%E9%85%B1%E5%90%8C%E6%AC%BE%E5%BE%AE%E4%BF%A1%E6%8E%A8%E9%80%81/Users/28601.DESKTOP-7QBTS9F/Desktop/Push/img/3.png">
-<meta property="og:image" content="https://kosakd.github.io/2021/11/06/%E5%AE%9E%E7%8E%B0server%E9%85%B1%E5%90%8C%E6%AC%BE%E5%BE%AE%E4%BF%A1%E6%8E%A8%E9%80%81/Users/28601.DESKTOP-7QBTS9F/Desktop/Push/img/4.png">
-<meta property="og:image" content="https://kosakd.github.io/2021/11/06/%E5%AE%9E%E7%8E%B0server%E9%85%B1%E5%90%8C%E6%AC%BE%E5%BE%AE%E4%BF%A1%E6%8E%A8%E9%80%81/Users/28601.DESKTOP-7QBTS9F/Desktop/Push/img/5.png">
+<meta property="og:image" content="https://kosakd.github.io/2021/11/06/%E5%AE%9E%E7%8E%B0server%E9%85%B1%E5%90%8C%E6%AC%BE%E5%BE%AE%E4%BF%A1%E6%8E%A8%E9%80%81/10.gif">
+<meta property="og:image" content="https://kosakd.github.io/2021/11/06/%E5%AE%9E%E7%8E%B0server%E9%85%B1%E5%90%8C%E6%AC%BE%E5%BE%AE%E4%BF%A1%E6%8E%A8%E9%80%81/6.png">
+<meta property="og:image" content="https://kosakd.github.io/2021/11/06/%E5%AE%9E%E7%8E%B0server%E9%85%B1%E5%90%8C%E6%AC%BE%E5%BE%AE%E4%BF%A1%E6%8E%A8%E9%80%81/7.png">
+<meta property="og:image" content="https://kosakd.github.io/2021/11/06/%E5%AE%9E%E7%8E%B0server%E9%85%B1%E5%90%8C%E6%AC%BE%E5%BE%AE%E4%BF%A1%E6%8E%A8%E9%80%81/8.png">
+<meta property="og:image" content="https://kosakd.github.io/2021/11/06/%E5%AE%9E%E7%8E%B0server%E9%85%B1%E5%90%8C%E6%AC%BE%E5%BE%AE%E4%BF%A1%E6%8E%A8%E9%80%81/1.png">
+<meta property="og:image" content="https://kosakd.github.io/2021/11/06/%E5%AE%9E%E7%8E%B0server%E9%85%B1%E5%90%8C%E6%AC%BE%E5%BE%AE%E4%BF%A1%E6%8E%A8%E9%80%81/2.png">
+<meta property="og:image" content="https://kosakd.github.io/2021/11/06/%E5%AE%9E%E7%8E%B0server%E9%85%B1%E5%90%8C%E6%AC%BE%E5%BE%AE%E4%BF%A1%E6%8E%A8%E9%80%81/3.png">
+<meta property="og:image" content="https://kosakd.github.io/2021/11/06/%E5%AE%9E%E7%8E%B0server%E9%85%B1%E5%90%8C%E6%AC%BE%E5%BE%AE%E4%BF%A1%E6%8E%A8%E9%80%81/4.png">
+<meta property="og:image" content="https://kosakd.github.io/2021/11/06/%E5%AE%9E%E7%8E%B0server%E9%85%B1%E5%90%8C%E6%AC%BE%E5%BE%AE%E4%BF%A1%E6%8E%A8%E9%80%81/5.png">
 <meta property="og:image" content="https://kosakd.github.io/2021/11/06/%E5%AE%9E%E7%8E%B0server%E9%85%B1%E5%90%8C%E6%AC%BE%E5%BE%AE%E4%BF%A1%E6%8E%A8%E9%80%81/9.png">
 <meta property="article:published_time" content="2021-11-06T10:04:55.000Z">
-<meta property="article:modified_time" content="2021-11-06T10:07:49.862Z">
+<meta property="article:modified_time" content="2021-11-06T10:22:46.636Z">
 <meta property="article:author" content="花开陌路’">
 <meta property="article:tag" content="笔记">
-<meta property="article:tag" content="工具">
+<meta property="article:tag" content="工具分享">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://kosakd.github.io/2021/11/06/%E5%AE%9E%E7%8E%B0server%E9%85%B1%E5%90%8C%E6%AC%BE%E5%BE%AE%E4%BF%A1%E6%8E%A8%E9%80%81/Users/28601.DESKTOP-7QBTS9F/Desktop/Push/img/10.gif">
+<meta name="twitter:image" content="https://kosakd.github.io/2021/11/06/%E5%AE%9E%E7%8E%B0server%E9%85%B1%E5%90%8C%E6%AC%BE%E5%BE%AE%E4%BF%A1%E6%8E%A8%E9%80%81/10.gif">
 
 
 <link rel="canonical" href="https://kosakd.github.io/2021/11/06/%E5%AE%9E%E7%8E%B0server%E9%85%B1%E5%90%8C%E6%AC%BE%E5%BE%AE%E4%BF%A1%E6%8E%A8%E9%80%81/">
@@ -149,7 +149,7 @@
   </li>
         <li class="menu-item menu-item-tags">
 
-    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签<span class="badge">14</span></a>
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签<span class="badge">13</span></a>
 
   </li>
         <li class="menu-item menu-item-categories">
@@ -221,7 +221,7 @@
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">14</span>
+        <span class="site-state-item-count">13</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -315,7 +315,7 @@
       <span class="post-meta-item-text">发表于</span>
       
 
-      <time title="创建时间：2021-11-06 18:04:55 / 修改时间：18:07:49" itemprop="dateCreated datePublished" datetime="2021-11-06T18:04:55+08:00">2021-11-06</time>
+      <time title="创建时间：2021-11-06 18:04:55 / 修改时间：18:22:46" itemprop="dateCreated datePublished" datetime="2021-11-06T18:04:55+08:00">2021-11-06</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -367,22 +367,22 @@
     
     
     <div class="post-body" itemprop="articleBody">
-        <h1 id="实现server酱同款微信推送"><a href="#实现server酱同款微信推送" class="headerlink" title="实现server酱同款微信推送"></a>实现server酱同款微信推送</h1><p><img src="/2021/11/06/%E5%AE%9E%E7%8E%B0server%E9%85%B1%E5%90%8C%E6%AC%BE%E5%BE%AE%E4%BF%A1%E6%8E%A8%E9%80%81/Users/28601.DESKTOP-7QBTS9F/Desktop/Push/img/10.gif" alt="10"></p>
+        <h1 id="实现server酱同款微信推送"><a href="#实现server酱同款微信推送" class="headerlink" title="实现server酱同款微信推送"></a>实现server酱同款微信推送</h1><p><img src="/2021/11/06/%E5%AE%9E%E7%8E%B0server%E9%85%B1%E5%90%8C%E6%AC%BE%E5%BE%AE%E4%BF%A1%E6%8E%A8%E9%80%81/10.gif" alt="10"></p>
 <p>这次是因为，新版server酱要收费，还限制一分钟，只能推送5条信息，以前一直用的老版本的，但是老版本的也限制了推送数量，每天一百条，就麻烦，所以就不麻烦service酱的服务器来做推送服务了，咱们自己造一个，原理很简的，就是调用微信公众号的接口，来实现模板消息推送</p>
 <a id="more"></a>
 
 <p>应为我的公众号再创建的时候选择的是个人，所以不能进行认证，也就不能给用户推送模板消息，所以此程序是基于微信公众平台接口测试，来实现的微信公众号消息推送的，每个人都可以到这里去申请测试号</p>
 <p><code>https://mp.weixin.qq.com/debug/cgi-bin/sandbox?t=sandbox/login</code></p>
 <p>账号登录成功后，把appID，appsecret，写入配置文件，</p>
-<p><img src="/2021/11/06/%E5%AE%9E%E7%8E%B0server%E9%85%B1%E5%90%8C%E6%AC%BE%E5%BE%AE%E4%BF%A1%E6%8E%A8%E9%80%81/Users/28601.DESKTOP-7QBTS9F/Desktop/Push/img/6.png" alt="6"></p>
+<p><img src="/2021/11/06/%E5%AE%9E%E7%8E%B0server%E9%85%B1%E5%90%8C%E6%AC%BE%E5%BE%AE%E4%BF%A1%E6%8E%A8%E9%80%81/6.png" alt="6"></p>
 <p>然后再测试号二维码，扫描关注测试公众号，会获得一个微信号，把获取的微信号写入数据库表中，详情看下面数据库配置，应为我的公众号不能认证，也就没有写用户注册的功能，只能手动将用户消息添加到数据库中</p>
-<p><img src="/2021/11/06/%E5%AE%9E%E7%8E%B0server%E9%85%B1%E5%90%8C%E6%AC%BE%E5%BE%AE%E4%BF%A1%E6%8E%A8%E9%80%81/Users/28601.DESKTOP-7QBTS9F/Desktop/Push/img/7.png" alt="7"></p>
+<p><img src="/2021/11/06/%E5%AE%9E%E7%8E%B0server%E9%85%B1%E5%90%8C%E6%AC%BE%E5%BE%AE%E4%BF%A1%E6%8E%A8%E9%80%81/7.png" alt="7"></p>
 <p>最后在模板消息接口新增模板</p>
 <p>模板标题随意填写，可以写，文章推送</p>
 <p>模板内容：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&#123;&#123;title1.DATA&#125;&#125;</span><br><span class="line">&#123;&#123;title2.DATA&#125;&#125; &#123;&#123;content1.DATA&#125;&#125;</span><br><span class="line">&#123;&#123;title3.DATA&#125;&#125; &#123;&#123;content2.DATA&#125;&#125;</span><br><span class="line">&#123;&#123;title4.DATA&#125;&#125; &#123;&#123;content3.DATA&#125;&#125;</span><br></pre></td></tr></table></figure>
 <p>配置完成后，会有一个模板ID，把模板id，写入配置文件中的，Templateid中，一切都配置完成后，即可运行程序</p>
-<p><img src="/2021/11/06/%E5%AE%9E%E7%8E%B0server%E9%85%B1%E5%90%8C%E6%AC%BE%E5%BE%AE%E4%BF%A1%E6%8E%A8%E9%80%81/Users/28601.DESKTOP-7QBTS9F/Desktop/Push/img/8.png" alt="8"></p>
+<p><img src="/2021/11/06/%E5%AE%9E%E7%8E%B0server%E9%85%B1%E5%90%8C%E6%AC%BE%E5%BE%AE%E4%BF%A1%E6%8E%A8%E9%80%81/8.png" alt="8"></p>
 <p>消息推送：</p>
 <p>urlPath：/msg?msgcontent=这是消息内容&amp;msgtitle=这是消息标题&amp;nameid=kosakd</p>
 <p>三个参数，msgtitle : 消息标题，msgcontent : 消息内容，nameid : 用户名</p>
@@ -396,16 +396,16 @@
 
 
 <h2 id="创建一个数据库，导入sql文件"><a href="#创建一个数据库，导入sql文件" class="headerlink" title="创建一个数据库，导入sql文件"></a>创建一个数据库，导入sql文件</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">CREATE DATABASE IF NOT EXISTS testPush DEFAULT CHARSET utf8 COLLATE utf8_general_ci;</span><br><span class="line"></span><br><span class="line">use testPush;</span><br><span class="line"></span><br><span class="line">source testpush.sql;</span><br><span class="line">--最后手动添加一条用户数据，（用户名，关注公众号的微信号，这里的微信号是指获取关注测试公众号的微信号）</span><br><span class="line">INSERT INTO &#96;userpush&#96; VALUES (&#39;kosakd&#39;, &#39;o-xxxxxx&#39;);</span><br></pre></td></tr></table></figure>
-<p><img src="/2021/11/06/%E5%AE%9E%E7%8E%B0server%E9%85%B1%E5%90%8C%E6%AC%BE%E5%BE%AE%E4%BF%A1%E6%8E%A8%E9%80%81/Users/28601.DESKTOP-7QBTS9F/Desktop/Push/img/1.png" alt="1"></p>
+<p><img src="/2021/11/06/%E5%AE%9E%E7%8E%B0server%E9%85%B1%E5%90%8C%E6%AC%BE%E5%BE%AE%E4%BF%A1%E6%8E%A8%E9%80%81/1.png" alt="1"></p>
 <h2 id="运行"><a href="#运行" class="headerlink" title="运行"></a>运行</h2><ul>
 <li>​    可以直接下载对应系统，编译好了的文件，设置下配置文件，就可以直接运行，当然要确保，mysql服务开启了，数据库和数据表创建了</li>
 </ul>
-<p><img src="/2021/11/06/%E5%AE%9E%E7%8E%B0server%E9%85%B1%E5%90%8C%E6%AC%BE%E5%BE%AE%E4%BF%A1%E6%8E%A8%E9%80%81/Users/28601.DESKTOP-7QBTS9F/Desktop/Push/img/2.png" alt="2"></p>
+<p><img src="/2021/11/06/%E5%AE%9E%E7%8E%B0server%E9%85%B1%E5%90%8C%E6%AC%BE%E5%BE%AE%E4%BF%A1%E6%8E%A8%E9%80%81/2.png" alt="2"></p>
 <p>直接运行pushServerV1.1.exe,然后访问，你的web服务器，path / 正常的话会显示</p>
-<p><img src="/2021/11/06/%E5%AE%9E%E7%8E%B0server%E9%85%B1%E5%90%8C%E6%AC%BE%E5%BE%AE%E4%BF%A1%E6%8E%A8%E9%80%81/Users/28601.DESKTOP-7QBTS9F/Desktop/Push/img/3.png" alt="3"></p>
+<p><img src="/2021/11/06/%E5%AE%9E%E7%8E%B0server%E9%85%B1%E5%90%8C%E6%AC%BE%E5%BE%AE%E4%BF%A1%E6%8E%A8%E9%80%81/3.png" alt="3"></p>
 <p> 发送一条消息，/msgpush?msgcontent=这是内容111111&amp;msgtitle=这是2222标题&amp;nameid=kosakd</p>
 <p>成功推送发送，推送成功，否则是，参数错误，则推送失败</p>
-<p><img src="/2021/11/06/%E5%AE%9E%E7%8E%B0server%E9%85%B1%E5%90%8C%E6%AC%BE%E5%BE%AE%E4%BF%A1%E6%8E%A8%E9%80%81/Users/28601.DESKTOP-7QBTS9F/Desktop/Push/img/4.png" alt="4"><img src="/2021/11/06/%E5%AE%9E%E7%8E%B0server%E9%85%B1%E5%90%8C%E6%AC%BE%E5%BE%AE%E4%BF%A1%E6%8E%A8%E9%80%81/Users/28601.DESKTOP-7QBTS9F/Desktop/Push/img/5.png" alt="2"></p>
+<p><img src="/2021/11/06/%E5%AE%9E%E7%8E%B0server%E9%85%B1%E5%90%8C%E6%AC%BE%E5%BE%AE%E4%BF%A1%E6%8E%A8%E9%80%81/4.png" alt="4"><img src="/2021/11/06/%E5%AE%9E%E7%8E%B0server%E9%85%B1%E5%90%8C%E6%AC%BE%E5%BE%AE%E4%BF%A1%E6%8E%A8%E9%80%81/5.png" alt="2"></p>
 <ul>
 <li><p>编译运行</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">git clone https:&#x2F;&#x2F;github.com&#x2F;kosakd&#x2F;kosakdPush.git</span><br><span class="line">cd kosakdPush</span><br><span class="line">linux:</span><br><span class="line">go env -w GOOS&#x3D;linux</span><br><span class="line">go build -o kosakdPush main.go</span><br><span class="line">chmod 777 kosakdPush&amp;&amp;.&#x2F;kosakdPush</span><br><span class="line">windows:</span><br><span class="line">go env -w GOOS&#x3D;windows</span><br><span class="line">go build -o kosakdPush.exe main.go</span><br><span class="line">kosakdPush.exe</span><br></pre></td></tr></table></figure>
@@ -450,7 +450,7 @@
 
           <div class="post-tags">
               <a href="/tags/%E7%AC%94%E8%AE%B0/" rel="tag"># 笔记</a>
-              <a href="/tags/%E5%B7%A5%E5%85%B7/" rel="tag"># 工具</a>
+              <a href="/tags/%E5%B7%A5%E5%85%B7%E5%88%86%E4%BA%AB/" rel="tag"># 工具分享</a>
           </div>
 
         
